@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[43,)"
+license="BSD 3-Clause License"
+issueTrackerURL="https://github.com/MultiCoreNetwork/SpaceCraft/issues"
+[[mods]]
+modId="spacecraft"
+version="${file.jarVersion}"
+displayName="SpaceCraft"
+# A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
+#updateJSONURL="https://change.me.example.invalid/updates.json" #optional
+displayURL="https://github.com/MultiCoreNetwork/SpaceCraft"
+logoFile="logo.png"
+credits="Developed by MultiCore Network for MarcusKron"
+authors="LoreSchaeffer, BisUmTo, Gnottero, Isax"
+description='''
+This is a description (maybe)
+'''
+[[dependencies.spacecraft]]
+    modId="forge"
+    mandatory=true
+    versionRange="[43,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.spacecraft]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.2,1.20)"
+    ordering="NONE"
+    side="BOTH"
