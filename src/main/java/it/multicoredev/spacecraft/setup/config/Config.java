@@ -1,11 +1,8 @@
-package it.multicoredev.spacecraft;
+package it.multicoredev.spacecraft.setup.config;
 
-import it.multicoredev.spacecraft.setup.ModSetup;
-import it.multicoredev.spacecraft.setup.Registration;
-import it.multicoredev.spacecraft.setup.config.Config;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
 
 /**
  * BSD 3-Clause License
@@ -37,17 +34,34 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-@Mod(SpaceCraft.MODID)
-public class SpaceCraft {
-    public static final String MODID = "spacecraft";
+public class Config {
+    public static void register() {
+        registerServerConfigs();
+        registerClientConfigs();
+        registerCommonConfigs();
+    }
 
-    public SpaceCraft() {
-        ModSetup.setup();
-        Registration.init();
-        Config.register();
+    private static void registerServerConfigs() {
+        ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
 
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        bus.addListener(ModSetup::init);
-        //DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> bus.addListener(ClientSetup::init));
+        //CompressorConfig.registerServerConfig(SERVER_BUILDER);
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_BUILDER.build());
+    }
+
+    private static void registerClientConfigs() {
+        ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+
+        //CompressorConfig.registerClientConfig(CLIENT_BUILDER);
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_BUILDER.build());
+    }
+
+    private static void registerCommonConfigs() {
+        ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
+
+
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_BUILDER.build());
     }
 }

@@ -1,11 +1,6 @@
-package it.multicoredev.spacecraft;
+package it.multicoredev.spacecraft.setup;
 
-import it.multicoredev.spacecraft.setup.ModSetup;
-import it.multicoredev.spacecraft.setup.Registration;
-import it.multicoredev.spacecraft.setup.config.Config;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 /**
  * BSD 3-Clause License
@@ -37,17 +32,11 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-@Mod(SpaceCraft.MODID)
-public class SpaceCraft {
-    public static final String MODID = "spacecraft";
+public class ClientSetup {
 
-    public SpaceCraft() {
-        ModSetup.setup();
-        Registration.init();
-        Config.register();
+    public static void init(FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
 
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        bus.addListener(ModSetup::init);
-        //DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> bus.addListener(ClientSetup::init));
+        });
     }
 }

@@ -1,11 +1,13 @@
-package it.multicoredev.spacecraft;
+package it.multicoredev.spacecraft.setup;
 
-import it.multicoredev.spacecraft.setup.ModSetup;
-import it.multicoredev.spacecraft.setup.Registration;
-import it.multicoredev.spacecraft.setup.config.Config;
+import it.multicoredev.spacecraft.SpaceCraft;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 /**
  * BSD 3-Clause License
@@ -37,17 +39,19 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-@Mod(SpaceCraft.MODID)
-public class SpaceCraft {
-    public static final String MODID = "spacecraft";
+@Mod.EventBusSubscriber(modid = SpaceCraft.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class ModSetup {
+    public static final CreativeModeTab SPACECRAFT_TAB = new CreativeModeTab(SpaceCraft.MODID) {
+        @Override
+        public ItemStack makeIcon() {
+            return new ItemStack(Items.DIAMOND.asItem());
+        }
+    };
 
-    public SpaceCraft() {
-        ModSetup.setup();
-        Registration.init();
-        Config.register();
+    public static void setup() {
+        IEventBus bus = MinecraftForge.EVENT_BUS;
+    }
 
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        bus.addListener(ModSetup::init);
-        //DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> bus.addListener(ClientSetup::init));
+    public static void init(FMLCommonSetupEvent event) {
     }
 }
