@@ -1,18 +1,13 @@
-package it.multicoredev.spacecraft;
+package it.multicoredev.spacecraft.datagen;
 
-import it.multicoredev.spacecraft.setup.ModSetup;
-import it.multicoredev.spacecraft.setup.registries.Registration;
-import it.multicoredev.spacecraft.setup.config.Config;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import it.multicoredev.spacecraft.utils.RegistryHelper;
+import net.minecraft.data.DataGenerator;
 
 /**
  * BSD 3-Clause License
  * <p>
- * Copyright (c) 2023, Lorenzo Magni, Kevin Delugan
+ * Copyright (c) 2022, Lorenzo Magni
+ * All rights reserved.
  * <p>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -39,18 +34,14 @@ import org.apache.logging.log4j.Logger;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-@Mod(SpaceCraft.MODID)
-public class SpaceCraft {
-    public static final String MODID = "spacecraft";
-    public static final Logger LOGGER = LogManager.getLogger();
+public class ModLootTables extends BaseLootTableProvider {
 
-    public SpaceCraft() {
-        ModSetup.setup();
-        Registration.init();
-        Config.register();
+    public ModLootTables(DataGenerator dataGeneratorIn) {
+        super(dataGeneratorIn);
+    }
 
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        bus.addListener(ModSetup::init);
-        //DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> bus.addListener(ClientSetup::init));
+    @Override
+    protected void addTables() {
+        RegistryHelper.getDataGenFields().forEach(br -> br.registerLootTables(this));
     }
 }

@@ -1,10 +1,17 @@
-package it.multicoredev.spacecraft.setup;
+package it.multicoredev.spacecraft.setup.registries;
 
+import it.multicoredev.spacecraft.setup.ModSetup;
+import it.multicoredev.spacecraft.utils.DataGen;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -44,10 +51,10 @@ import static it.multicoredev.spacecraft.SpaceCraft.MODID;
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 public class Registration {
-    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
-    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
-    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID);
-    private static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MODID);
+    static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
+    static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
+    static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID);
+    static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MODID);
 
     public static void init() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -57,9 +64,17 @@ public class Registration {
         CONTAINERS.register(bus);
     }
 
-    private static <B extends Block> RegistryObject<Item> fromBlock(RegistryObject<B> block) {
+    static <B extends Block> RegistryObject<Item> fromBlock(RegistryObject<B> block) {
         return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), new Item.Properties().tab(ModSetup.SPACECRAFT_TAB)));
     }
+
+    @DataGen
+    public static final BaseBlock TEST = new BaseBlock("test", BlockBehaviour.Properties.copy(Blocks.STONE))
+            .setName("Test");
+//            .addBlockTags(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL);
+
+//    public static final RegistryObject<Block> OXYGEN_GENERATOR = BLOCKS.register("oxygen_generator", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(2.0f).requiresCorrectToolForDrops()));
+//    public static final RegistryObject<Item> OXYGEN_GENERATOR_ITEM = fromBlock(OXYGEN_GENERATOR);
 
 //    public static final RegistryObject<Block> OMEGA_BLOCK = BLOCKS.register("omega_block", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(2.0f).requiresCorrectToolForDrops()));
 //    public static final RegistryObject<Item> OMEGA_BLOCK_ITEM = fromBlock(OMEGA_BLOCK);

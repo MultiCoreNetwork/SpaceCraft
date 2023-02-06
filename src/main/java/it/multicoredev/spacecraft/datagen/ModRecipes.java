@@ -1,18 +1,16 @@
-package it.multicoredev.spacecraft;
+package it.multicoredev.spacecraft.datagen;
 
-import it.multicoredev.spacecraft.setup.ModSetup;
-import it.multicoredev.spacecraft.setup.registries.Registration;
-import it.multicoredev.spacecraft.setup.config.Config;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+
+import java.util.function.Consumer;
 
 /**
  * BSD 3-Clause License
  * <p>
- * Copyright (c) 2023, Lorenzo Magni, Kevin Delugan
+ * Copyright (c) 2022, Lorenzo Magni
+ * All rights reserved.
  * <p>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -39,18 +37,27 @@ import org.apache.logging.log4j.Logger;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-@Mod(SpaceCraft.MODID)
-public class SpaceCraft {
-    public static final String MODID = "spacecraft";
-    public static final Logger LOGGER = LogManager.getLogger();
+public class ModRecipes extends RecipeProvider {
 
-    public SpaceCraft() {
-        ModSetup.setup();
-        Registration.init();
-        Config.register();
+    public ModRecipes(DataGenerator generatorIn) {
+        super(generatorIn);
+    }
 
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        bus.addListener(ModSetup::init);
-        //DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> bus.addListener(ClientSetup::init));
+    @Override
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
+//        ShapedRecipeBuilder.shaped(OMEGA_BLOCK.get())
+//                .pattern("###")
+//                .pattern("###")
+//                .pattern("###")
+//                .define('#', OMEGA_INGOT.get())
+//                .group(MODID)
+//                .unlockedBy("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(OMEGA_INGOT.get()))
+//                .save(consumer);
+//
+//        ShapelessRecipeBuilder.shapeless(OMEGA_INGOT.get(), 9)
+//                .requires(OMEGA_BLOCK.get())
+//                .group(MODID)
+//                .unlockedBy("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(OMEGA_BLOCK.get()))
+//                .save(consumer);
     }
 }
