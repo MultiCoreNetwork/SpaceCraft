@@ -1,8 +1,7 @@
 package it.multicoredev.spacecraft.setup.config;
 
+import com.google.common.collect.Lists;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.List;
 
@@ -36,32 +35,15 @@ import java.util.List;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class Config {
-    public static void register() {
-        registerServerConfigs();
-        registerClientConfigs();
-        registerCommonConfigs();
-    }
+public class WorldConfig {
+    public static ForgeConfigSpec.ConfigValue<List<?>> OXYGEN_REQUIRED_IN;
 
-    private static void registerServerConfigs() {
-        ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
+    public static void registerServerConfig(ForgeConfigSpec.Builder SERVER_BUILDER) {
+        SERVER_BUILDER.comment("Settings for world related features").push("world");
+        OXYGEN_REQUIRED_IN = SERVER_BUILDER
+                .comment("A list of all the dimensions in which oxygen is required")
+                .defineList("oxygen_required_in", Lists.newArrayList(), e -> e instanceof String);
 
-        //CompressorConfig.registerServerConfig(SERVER_BUILDER);
-        WorldConfig.registerServerConfig(SERVER_BUILDER);
-
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_BUILDER.build());
-    }
-
-    private static void registerClientConfigs() {
-        ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
-
-        //CompressorConfig.registerClientConfig(CLIENT_BUILDER);;
-
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_BUILDER.build());
-    }
-
-    private static void registerCommonConfigs() {
-        ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_BUILDER.build());
+        SERVER_BUILDER.pop();
     }
 }

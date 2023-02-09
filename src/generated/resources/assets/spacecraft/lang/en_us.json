@@ -1,0 +1,6 @@
+{
+  "block.spacecraft.test": "Test",
+  "itemGroup.spacecraft": "SpaceCraft",
+
+  "spacecraft.warning.oxygen_needed": "[KroniumOS]#> Oxygen supply needed to breathe in this dimension!"
+}

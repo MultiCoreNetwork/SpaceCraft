@@ -2,6 +2,10 @@ package it.multicoredev.spacecraft.setup.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * BSD 3-Clause License
  * <p>
@@ -36,8 +40,9 @@ public class CompressorConfig {
     public static ForgeConfigSpec.IntValue POWERGEN_CAPACITY;
     public static ForgeConfigSpec.IntValue POWERGEN_GENERATE;
     public static ForgeConfigSpec.IntValue POWERGEN_SEND;
-
     public static ForgeConfigSpec.DoubleValue RENDER_SCALE;
+    public static ForgeConfigSpec.ConfigValue<List<String>> OXYGEN_REQUIRED_IN;
+
 
     public static void registerServerConfig(ForgeConfigSpec.Builder SERVER_BUILDER) {
         SERVER_BUILDER.comment("Settings for the power generator").push("powergen");
@@ -51,6 +56,10 @@ public class CompressorConfig {
         POWERGEN_SEND = SERVER_BUILDER
                 .comment("How much energy the power generator will send out to adjacent blocks every tick")
                 .defineInRange("send", 200, 1, Integer.MAX_VALUE);
+
+        OXYGEN_REQUIRED_IN = SERVER_BUILDER
+                .comment("A list of all the dimensions in which oxygen is required")
+                .defineInList("oxygen_required_in", new ArrayList<>(), Collections.emptyList());
 
         SERVER_BUILDER.pop();
     }
