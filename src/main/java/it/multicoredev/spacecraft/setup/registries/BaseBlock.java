@@ -1,6 +1,7 @@
 package it.multicoredev.spacecraft.setup.registries;
 
 import it.multicoredev.spacecraft.SpaceCraft;
+import it.multicoredev.spacecraft.datagen.BaseLootTableProvider;
 import it.multicoredev.spacecraft.datagen.ModLanguageProvider;
 import it.multicoredev.spacecraft.datagen.ModLootTables;
 import it.multicoredev.spacecraft.utils.RegistryHelper;
@@ -22,24 +23,34 @@ import static it.multicoredev.spacecraft.setup.registries.Registration.BLOCKS;
 import static it.multicoredev.spacecraft.setup.registries.Registration.fromBlock;
 
 /**
- * Copyright © 2022 by Lorenzo Magni
- * This file is part of Geology.
- * Geology is under "The 3-Clause BSD License", you can find a copy <a href="https://opensource.org/licenses/BSD-3-Clause">here</a>.
+ * BSD 3-Clause License
  * <p>
- * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
- * 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
- * disclaimer in the documentation and/or other materials provided with the distribution.
- * 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products
- * derived from this software without specific prior written permission.
+ * Copyright (c) 2023, Lorenzo Magni, Kevin Delugan, Isaia Tonini, Valerio Collura
  * <p>
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
- * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
- * OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
- * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
- * THE POSSIBILITY OF SUCH DAMAGE.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * <p>
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ * <p>
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ * <p>
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ * <p>
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 public class BaseBlock implements BaseRegistry {
     protected final String name;
@@ -79,8 +90,8 @@ public class BaseBlock implements BaseRegistry {
 
 
     @Override
-    public BaseBlock setName(String lang) {
-        this.lang.add(lang);
+    public BaseBlock setName(String blockName) {
+        this.lang.add(blockName);
         return this;
     }
 
@@ -120,12 +131,10 @@ public class BaseBlock implements BaseRegistry {
     }
 
     @Override
-    public final void addAllRecipes(Consumer<FinishedRecipe> consumer) {
+    public void addAllRecipes(Consumer<FinishedRecipe> consumer) {
         Map<String, Integer> shaped = new HashMap<>();
         Map<String, Integer> shapeless = new HashMap<>();
         Map<String, Integer> smelting = new HashMap<>();
-        Map<String, Integer> blasting = new HashMap<>();
-        Map<String, Integer> smoking = new HashMap<>();
         Map<String, Integer> stonecutter = new HashMap<>();
 
         recipes.forEach(recipe -> {
@@ -197,6 +206,7 @@ public class BaseBlock implements BaseRegistry {
     }
 
     @Override
-    public void registerLootTables(ModLootTables generator) {
+    public void registerLootTables() {
+        BaseLootTableProvider.createSimpleTable(name, getBlock());
     }
 }

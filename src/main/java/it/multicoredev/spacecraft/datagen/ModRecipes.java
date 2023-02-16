@@ -1,5 +1,6 @@
 package it.multicoredev.spacecraft.datagen;
 
+import it.multicoredev.spacecraft.utils.RegistryHelper;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -9,8 +10,7 @@ import java.util.function.Consumer;
 /**
  * BSD 3-Clause License
  * <p>
- * Copyright (c) 2022, Lorenzo Magni
- * All rights reserved.
+ * Copyright (c) 2023, Lorenzo Magni, Kevin Delugan, Isaia Tonini, Valerio Collura
  * <p>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,19 +45,6 @@ public class ModRecipes extends RecipeProvider {
 
     @Override
     protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
-//        ShapedRecipeBuilder.shaped(OMEGA_BLOCK.get())
-//                .pattern("###")
-//                .pattern("###")
-//                .pattern("###")
-//                .define('#', OMEGA_INGOT.get())
-//                .group(MODID)
-//                .unlockedBy("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(OMEGA_INGOT.get()))
-//                .save(consumer);
-//
-//        ShapelessRecipeBuilder.shapeless(OMEGA_INGOT.get(), 9)
-//                .requires(OMEGA_BLOCK.get())
-//                .group(MODID)
-//                .unlockedBy("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(OMEGA_BLOCK.get()))
-//                .save(consumer);
+        RegistryHelper.getDataGenFields().forEach(br -> br.addAllRecipes(consumer));
     }
 }

@@ -23,7 +23,7 @@ import static it.multicoredev.spacecraft.SpaceCraft.MODID;
 /**
  * BSD 3-Clause License
  * <p>
- * Copyright (c) 2023, Lorenzo Magni, Kevin Delugan
+ * Copyright (c) 2023, Lorenzo Magni, Kevin Delugan, Isaia Tonini, Valerio Collura
  * <p>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -69,20 +69,5 @@ public class Registration {
     }
 
     @DataGen
-    public static final BaseBlock TEST = new BaseBlock("test", BlockBehaviour.Properties.copy(Blocks.STONE))
-            .setName("Test");
-//            .addBlockTags(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL);
-
-//    public static final RegistryObject<Block> OXYGEN_GENERATOR = BLOCKS.register("oxygen_generator", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(2.0f).requiresCorrectToolForDrops()));
-//    public static final RegistryObject<Item> OXYGEN_GENERATOR_ITEM = fromBlock(OXYGEN_GENERATOR);
-
-//    public static final RegistryObject<Block> OMEGA_BLOCK = BLOCKS.register("omega_block", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(2.0f).requiresCorrectToolForDrops()));
-//    public static final RegistryObject<Item> OMEGA_BLOCK_ITEM = fromBlock(OMEGA_BLOCK);
-//
-//    public static final RegistryObject<Item> OMEGA_INGOT = ITEMS.register("omega_ingot", () -> new Item(new Item.Properties().tab(ModSetup.ESOSITY_TAB)));
-//
-//    public static RegistryObject<CompressorBlock> COMPRESSOR = BLOCKS.register("compressor", CompressorBlock::new);
-//    public static RegistryObject<Item> COMPRESSOR_ITEM = fromBlock(COMPRESSOR);
-//    public static RegistryObject<BlockEntityType<CompressorBE>> COMPRESSOR_BE = BLOCK_ENTITIES.register("compressor", () -> BlockEntityType.Builder.of(CompressorBE::new, COMPRESSOR.get()).build(null));
-//    public static RegistryObject<MenuType<CompressorContainer>> COMPRESSOR_CONTAINER = CONTAINERS.register("compressor", () -> IForgeMenuType.create((windowId, inv, data) -> new CompressorContainer(windowId, data.readBlockPos(), inv, inv.player)));
+    public static final BaseBlock TEST = new BaseBlock("test", BlockBehaviour.Properties.copy(Blocks.STONE)).setName("Test");
 }
