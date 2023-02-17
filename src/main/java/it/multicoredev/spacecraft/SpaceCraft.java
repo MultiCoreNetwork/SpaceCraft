@@ -1,8 +1,8 @@
 package it.multicoredev.spacecraft;
 
 import it.multicoredev.spacecraft.setup.ModSetup;
-import it.multicoredev.spacecraft.setup.registries.Registration;
 import it.multicoredev.spacecraft.setup.config.Config;
+import it.multicoredev.spacecraft.setup.registries.Registration;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -44,6 +44,8 @@ public class SpaceCraft {
     public static final String MODID = "spacecraft";
     public static final Logger LOGGER = LogManager.getLogger();
 
+    //TODO Use SavedData to save and count temperature, oxygen, etc. (See ManaManager https://www.mcjty.eu/docs/1.18/ep7#saved-data-manamanager)
+
     public SpaceCraft() {
         ModSetup.setup();
         Registration.init();
@@ -53,4 +55,5 @@ public class SpaceCraft {
         bus.addListener(ModSetup::init);
         //DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> bus.addListener(ClientSetup::init));
     }
+
 }

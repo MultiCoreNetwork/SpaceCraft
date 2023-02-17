@@ -4,6 +4,7 @@ import it.multicoredev.spacecraft.utils.RecipeBuilderUtil;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import java.util.function.Consumer;
@@ -38,24 +39,24 @@ import java.util.function.Consumer;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class Metal extends BaseBlock {
+public class Metal extends BlockBase<Block> {
     private final String ingotName;
     private final String nuggetName;
     private final String dustName;
-    private final BaseItem ingot;
-    private final BaseItem nugget;
-    private final BaseItem dust;
+    private final ItemBase ingot;
+    private final ItemBase nugget;
+    private final ItemBase dust;
 
     public Metal(String name, BlockBehaviour.Properties blockProperties, Item.Properties ingotProperties, Item.Properties nuggetProperties, Item.Properties dustProperties) {
-        super(name + "_block", blockProperties);
+        super(name + "_block", () -> new Block(blockProperties));
 
         ingotName = name + "_ingot";
         nuggetName = name + "_nugget";
         dustName = name + "_dust";
 
-        ingot = new BaseItem(ingotName, ingotProperties);
-        nugget = new BaseItem(nuggetName, nuggetProperties);
-        dust = dustProperties != null ? new BaseItem(dustName, dustProperties) : null;
+        ingot = new ItemBase(ingotName, ingotProperties);
+        nugget = new ItemBase(nuggetName, nuggetProperties);
+        dust = dustProperties != null ? new ItemBase(dustName, dustProperties) : null;
     }
 
     public Metal(String name, BlockBehaviour.Properties blockProperties, Item.Properties ingotProperties, Item.Properties nuggetProperties) {
@@ -63,30 +64,30 @@ public class Metal extends BaseBlock {
     }
 
     public Metal(String name, BlockBehaviour.Properties blockProperties, Item.Properties itemProperties, boolean addDust) {
-        super(name + "_block", blockProperties);
+        super(name + "_block", () -> new Block(blockProperties));
 
         ingotName = name + "_ingot";
         nuggetName = name + "_nugget";
         dustName = name + "_dust";
 
-        ingot = new BaseItem(ingotName, itemProperties);
-        nugget = new BaseItem(nuggetName, itemProperties);
-        dust = addDust ? new BaseItem(dustName, itemProperties) : null;
+        ingot = new ItemBase(ingotName, itemProperties);
+        nugget = new ItemBase(nuggetName, itemProperties);
+        dust = addDust ? new ItemBase(dustName, itemProperties) : null;
     }
 
     public Metal(String name, BlockBehaviour.Properties blockProperties, Item.Properties itemProperties) {
         this(name, blockProperties, itemProperties, false);
     }
 
-    public BaseItem getIngot() {
+    public ItemBase getIngot() {
         return ingot;
     }
 
-    public BaseItem getNugget() {
+    public ItemBase getNugget() {
         return nugget;
     }
 
-    public BaseItem getDust() {
+    public ItemBase getDust() {
         return dust;
     }
 

@@ -48,14 +48,14 @@ import static it.multicoredev.spacecraft.setup.registries.Registration.ITEMS;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class BaseItem implements BaseRegistry {
+public class ItemBase implements BaseRegistry {
     protected final String name;
     protected final RegistryObject<Item> item;
     protected final List<String> lang = new ArrayList<>();
     protected final List<RecipeBuilder> recipes = new ArrayList<>();
     protected final Map<TagKey<Item>, Item> itemTags = new HashMap<>();
 
-    public BaseItem(String name, Item.Properties properties) {
+    public ItemBase(String name, Item.Properties properties) {
         this.name = name;
 
         this.item = ITEMS.register(name, () -> new Item(properties.tab(ModSetup.SPACECRAFT_TAB)));
@@ -74,30 +74,30 @@ public class BaseItem implements BaseRegistry {
     }
 
     @Override
-    public BaseItem setName(String itemName) {
+    public ItemBase setName(String itemName) {
         lang.add(itemName);
         return this;
     }
 
     @Override
-    public BaseItem addRecipes(RecipeBuilder... builders) {
+    public ItemBase addRecipes(RecipeBuilder... builders) {
         this.recipes.addAll(Arrays.asList(builders));
         return this;
     }
 
     @Override
-    public BaseItem addRecipes(Collection<? extends RecipeBuilder> builders) {
+    public ItemBase addRecipes(Collection<? extends RecipeBuilder> builders) {
         this.recipes.addAll(builders);
         return this;
     }
 
     @Override
-    public BaseItem addBlockTags(TagKey<Block>... tags) {
+    public ItemBase addBlockTags(TagKey<Block>... tags) {
         throw new UnsupportedOperationException("Cannot add block tags to an item");
     }
 
     @Override
-    public BaseItem addItemTags(TagKey<Item>... tags) {
+    public ItemBase addItemTags(TagKey<Item>... tags) {
         for (TagKey<Item> tag : tags) itemTags.put(tag, getItem());
         return this;
     }

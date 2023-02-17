@@ -50,7 +50,7 @@ import static it.multicoredev.spacecraft.setup.registries.Registration.fromBlock
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class FullBlock extends BaseBlock {
+public class FullBlock extends BlockBase<Block> {
     private final String secondaryName;
     private String doubleSlabTexture;
     private final RegistryObject<SlabBlock> slab;
@@ -61,7 +61,7 @@ public class FullBlock extends BaseBlock {
     private final RegistryObject<Item> wallItem;
 
     public FullBlock(String name, String secondaryName, BlockBehaviour.Properties properties) {
-        super(name, properties);
+        super(name, () -> new Block(properties));
 
         this.secondaryName = secondaryName;
         this.doubleSlabTexture = name;

@@ -3,8 +3,6 @@ package it.multicoredev.spacecraft.setup.registries;
 import it.multicoredev.spacecraft.SpaceCraft;
 import it.multicoredev.spacecraft.datagen.BaseLootTableProvider;
 import it.multicoredev.spacecraft.datagen.ModLanguageProvider;
-import it.multicoredev.spacecraft.datagen.ModLootTables;
-import it.multicoredev.spacecraft.utils.RegistryHelper;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -18,6 +16,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static it.multicoredev.spacecraft.setup.registries.Registration.BLOCKS;
 import static it.multicoredev.spacecraft.setup.registries.Registration.fromBlock;
@@ -52,23 +51,27 @@ import static it.multicoredev.spacecraft.setup.registries.Registration.fromBlock
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class BaseBlock implements BaseRegistry {
+public class BlockBase<T extends Block> implements BaseRegistry {
     protected final String name;
-    protected final RegistryObject<Block> block;
+    protected final RegistryObject<T> block;
     protected final RegistryObject<Item> blockItem;
     protected final List<String> lang = new ArrayList<>();
     protected final List<RecipeBuilder> recipes = new ArrayList<>();
     protected final Map<TagKey<Block>, Block> blockTags = new HashMap<>();
     protected final Map<TagKey<Item>, Item> itemTags = new HashMap<>();
 
-    public BaseBlock(String name, BlockBehaviour.Properties properties) {
+    public BlockBase(String name, Supplier<T> blockSupplier) {
         this.name = name;
 
-        this.block = BLOCKS.register(name, () -> new Block(properties));
+        this.block = BLOCKS.register(name, blockSupplier);
         this.blockItem = fromBlock(this.block);
     }
 
-    public RegistryObject<Block> getBlockRegistry() {
+    public static BlockBase<Block> create(String name, BlockBehaviour.Properties properties) {
+        return new BlockBase<>(name, () -> new Block(properties));
+    }
+
+    public RegistryObject<T> getBlockRegistry() {
         return block;
     }
 
@@ -90,31 +93,31 @@ public class BaseBlock implements BaseRegistry {
 
 
     @Override
-    public BaseBlock setName(String blockName) {
+    public BlockBase<T> setName(String blockName) {
         this.lang.add(blockName);
         return this;
     }
 
     @Override
-    public BaseBlock addRecipes(RecipeBuilder... builders) {
+    public BlockBase<T> addRecipes(RecipeBuilder... builders) {
         this.recipes.addAll(Arrays.asList(builders));
         return this;
     }
 
     @Override
-    public BaseBlock addRecipes(Collection<? extends RecipeBuilder> builders) {
+    public BlockBase<T> addRecipes(Collection<? extends RecipeBuilder> builders) {
         this.recipes.addAll(builders);
         return this;
     }
 
     @Override
-    public BaseBlock addBlockTags(TagKey<Block>... tags) {
+    public BlockBase<T> addBlockTags(TagKey<Block>... tags) {
         for (TagKey<Block> tag : tags) blockTags.put(tag, getBlock());
         return this;
     }
 
     @Override
-    public BaseBlock addItemTags(TagKey<Item>... tags) {
+    public BlockBase<T> addItemTags(TagKey<Item>... tags) {
         for (TagKey<Item> tag : tags) itemTags.put(tag, getBlockItem());
         return this;
     }

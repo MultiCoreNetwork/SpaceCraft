@@ -1,15 +1,15 @@
 package it.multicoredev.spacecraft.setup;
 
 import it.multicoredev.spacecraft.SpaceCraft;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.common.MinecraftForge;
+import it.multicoredev.spacecraft.data.WirelessEnergyStorage;
+import it.multicoredev.spacecraft.utils.EnergyUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.event.level.ChunkEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 /**
  * BSD 3-Clause License
@@ -41,19 +41,35 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-@Mod.EventBusSubscriber(modid = SpaceCraft.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ModSetup {
-    public static final CreativeModeTab SPACECRAFT_TAB = new CreativeModeTab(SpaceCraft.MODID) {
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(Items.DIAMOND.asItem());
-        }
-    };
+@Mod.EventBusSubscriber(modid = SpaceCraft.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+public class Events {
+    private static WirelessEnergyStorage wirelessEnergyStorage = WirelessEnergyStorage.get();
 
-    public static void setup() {
-        IEventBus bus = MinecraftForge.EVENT_BUS;
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onBEPlaced(BlockEvent.EntityPlaceEvent event) {
+        BlockPos pos = event.getPos();
+        BlockEntity be = EnergyUtil.canReceiveEnergy(event.getState(), event.getLevel(), pos);
+        if (be == null) return;
+
+        wirelessEnergyStorage.addUser(pos, be);
     }
 
-    public static void init(FMLCommonSetupEvent event) {
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onBlockBreak(BlockEvent.BreakEvent event) {
+        BlockPos pos = event.getPos();
+        BlockEntity be = EnergyUtil.canReceiveEnergy(event.getState(), event.getLevel(), pos);
+        if (be == null) return;
+
+        wirelessEnergyStorage.removeUser(pos);
+    }
+
+    @SubscribeEvent
+    public static void onChunkLoad(ChunkEvent.Load event) {
+        wirelessEnergyStorage.loadFromChunk(event.getChunk(), event.getLevel());
+    }
+
+    @SubscribeEvent
+    public static void onChunkUnload(ChunkEvent.Unload event) {
+        wirelessEnergyStorage.unloadFromChunk(event.getChunk(), event.getLevel());
     }
 }

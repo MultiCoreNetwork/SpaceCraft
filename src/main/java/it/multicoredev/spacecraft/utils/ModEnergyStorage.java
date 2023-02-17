@@ -1,15 +1,6 @@
-package it.multicoredev.spacecraft.setup;
+package it.multicoredev.spacecraft.utils;
 
-import it.multicoredev.spacecraft.SpaceCraft;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.energy.EnergyStorage;
 
 /**
  * BSD 3-Clause License
@@ -41,19 +32,47 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-@Mod.EventBusSubscriber(modid = SpaceCraft.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ModSetup {
-    public static final CreativeModeTab SPACECRAFT_TAB = new CreativeModeTab(SpaceCraft.MODID) {
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(Items.DIAMOND.asItem());
-        }
-    };
+public class ModEnergyStorage extends EnergyStorage {
 
-    public static void setup() {
-        IEventBus bus = MinecraftForge.EVENT_BUS;
+    public ModEnergyStorage(int capacity, int maxTransfer) {
+        super(capacity, 0, maxTransfer);
     }
 
-    public static void init(FMLCommonSetupEvent event) {
+    protected void onEnergyChanged() {
+    }
+
+    @Override
+    public int receiveEnergy(int maxReceive, boolean simulate) {
+        int rc = super.receiveEnergy(maxReceive, simulate);
+        if (rc > 0 && !simulate) onEnergyChanged();
+        return rc;
+    }
+
+    @Override
+    public int extractEnergy(int maxExtract, boolean simulate) {
+        int rc = super.extractEnergy(maxExtract, simulate);
+        if (rc > 0 && !simulate) onEnergyChanged();
+        return rc;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
+        onEnergyChanged();
+    }
+
+    public void addEnergy(int energy) {
+        this.energy += energy;
+        if (this.energy > getMaxEnergyStored()) this.energy = getMaxEnergyStored();
+        onEnergyChanged();
+    }
+
+    public void consumeEnergy(int energy) {
+        this.energy -= energy;
+        if (this.energy < 0) this.energy = 0;
+        onEnergyChanged();
+    }
+
+    public int getMaxTransfer() {
+        return maxExtract;
     }
 }

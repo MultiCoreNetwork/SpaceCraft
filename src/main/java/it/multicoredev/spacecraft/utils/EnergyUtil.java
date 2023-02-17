@@ -1,15 +1,13 @@
-package it.multicoredev.spacecraft.setup;
+package it.multicoredev.spacecraft.utils;
 
-import it.multicoredev.spacecraft.SpaceCraft;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * BSD 3-Clause License
@@ -41,19 +39,28 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-@Mod.EventBusSubscriber(modid = SpaceCraft.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ModSetup {
-    public static final CreativeModeTab SPACECRAFT_TAB = new CreativeModeTab(SpaceCraft.MODID) {
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(Items.DIAMOND.asItem());
+public class EnergyUtil {
+
+    public static BlockEntity canReceiveEnergy(BlockState state, LevelAccessor level, BlockPos pos) {
+        if (!state.hasBlockEntity()) return null;
+
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be == null) return null;
+        if (!be.getCapability(ForgeCapabilities.ENERGY).isPresent()) return null;
+
+        AtomicBoolean canReceive = new AtomicBoolean(false);
+
+        for (Direction side : Direction.values()) {
+            be.getCapability(ForgeCapabilities.ENERGY, side).map(handler -> {
+                if (handler.canReceive()) canReceive.set(true);
+                return true;
+            });
+
+            if (canReceive.get()) break;
         }
-    };
 
-    public static void setup() {
-        IEventBus bus = MinecraftForge.EVENT_BUS;
+        if (canReceive.get()) return be;
+        return null;
     }
 
-    public static void init(FMLCommonSetupEvent event) {
-    }
 }

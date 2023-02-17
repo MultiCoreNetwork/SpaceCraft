@@ -1,9 +1,9 @@
 package it.multicoredev.spacecraft.setup.registries;
 
+import it.multicoredev.spacecraft.blocks.generators.creative.CreativeGenerator;
+import it.multicoredev.spacecraft.blocks.generators.creative.CreativeGeneratorBE;
 import it.multicoredev.spacecraft.setup.ModSetup;
 import it.multicoredev.spacecraft.utils.DataGen;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -69,5 +68,10 @@ public class Registration {
     }
 
     @DataGen
-    public static final BaseBlock TEST = new BaseBlock("test", BlockBehaviour.Properties.copy(Blocks.STONE)).setName("Test");
+    public static final BlockBase<Block> TEST = BlockBase.create("test", BlockBehaviour.Properties.copy(Blocks.STONE)).setName("Test");
+
+    @DataGen
+    public static final BlockBase<CreativeGenerator> CREATIVE_GENERATOR = new BlockBase<>("creative_generator", CreativeGenerator::new);
+    public static final RegistryObject<BlockEntityType<CreativeGeneratorBE>> CREATIVE_GENERATOR_BE = BLOCK_ENTITIES.register(CREATIVE_GENERATOR.getRegistryName(), () -> BlockEntityType.Builder.of(CreativeGeneratorBE::new, CREATIVE_GENERATOR.getBlock()).build(null));
+
 }
