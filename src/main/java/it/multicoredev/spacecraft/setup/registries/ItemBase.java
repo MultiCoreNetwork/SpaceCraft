@@ -16,7 +16,7 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static it.multicoredev.spacecraft.setup.registries.Registration.ITEMS;
+import static it.multicoredev.spacecraft.setup.registries.ModRegistry.ITEMS;
 
 /**
  * BSD 3-Clause License

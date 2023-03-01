@@ -2,7 +2,7 @@ package it.multicoredev.spacecraft.utils;
 
 import it.multicoredev.spacecraft.SpaceCraft;
 import it.multicoredev.spacecraft.setup.registries.BaseRegistry;
-import it.multicoredev.spacecraft.setup.registries.Registration;
+import it.multicoredev.spacecraft.setup.registries.ModRegistry;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class RegistryHelper {
     public static List<BaseRegistry> getDataGenFields() {
         List<BaseRegistry> registries = new ArrayList<>();
 
-        Field[] fields = Registration.class.getDeclaredFields();
+        Field[] fields = ModRegistry.class.getDeclaredFields();
         for (Field field : fields) {
             if (!field.isAnnotationPresent(DataGen.class)) continue;
 

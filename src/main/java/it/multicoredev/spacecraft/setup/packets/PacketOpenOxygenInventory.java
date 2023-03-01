@@ -1,9 +1,11 @@
-package it.multicoredev.spacecraft.setup;
+package it.multicoredev.spacecraft.setup.packets;
 
-import it.multicoredev.spacecraft.SpaceCraft;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import it.multicoredev.spacecraft.inventory.OxygenInventory;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkHooks;
+
+import java.util.function.Supplier;
 
 /**
  * BSD 3-Clause License
@@ -35,13 +37,24 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-@Mod.EventBusSubscriber(modid = SpaceCraft.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ClientSetup {
+public class PacketOpenOxygenInventory {
 
-    public static void init(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            GuiHandler.INSTANCE.registerEvents();
-            GuiHandler.INSTANCE.registerScreens();
+    public PacketOpenOxygenInventory() {
+    }
+
+    public PacketOpenOxygenInventory(FriendlyByteBuf buf) {
+    }
+
+    public void toBytes(FriendlyByteBuf buf) {
+    }
+
+    public boolean handle(Supplier<NetworkEvent.Context> supplier) {
+        NetworkEvent.Context ctx = supplier.get();
+
+        ctx.enqueueWork(() -> {
+            NetworkHooks.openScreen(ctx.getSender(), new OxygenInventory());
         });
+
+        return true;
     }
 }

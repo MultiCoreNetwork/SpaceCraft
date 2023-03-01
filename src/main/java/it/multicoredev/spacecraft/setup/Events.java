@@ -43,7 +43,7 @@ import net.minecraftforge.fml.common.Mod;
  */
 @Mod.EventBusSubscriber(modid = SpaceCraft.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class Events {
-    private static WirelessEnergyStorage wirelessEnergyStorage = WirelessEnergyStorage.get();
+    private static final WirelessEnergyStorage wirelessEnergyStorage = WirelessEnergyStorage.get();
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onBEPlaced(BlockEvent.EntityPlaceEvent event) {

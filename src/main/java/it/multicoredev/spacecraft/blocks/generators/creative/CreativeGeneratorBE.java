@@ -1,8 +1,7 @@
 package it.multicoredev.spacecraft.blocks.generators.creative;
 
-import it.multicoredev.spacecraft.SpaceCraft;
 import it.multicoredev.spacecraft.data.WirelessEnergyStorage;
-import it.multicoredev.spacecraft.setup.registries.Registration;
+import it.multicoredev.spacecraft.setup.registries.ModRegistry;
 import it.multicoredev.spacecraft.utils.ModEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,7 +15,6 @@ import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -54,7 +52,7 @@ public class CreativeGeneratorBE extends BlockEntity {
     private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
 
     public CreativeGeneratorBE(BlockPos pos, BlockState state) {
-        super(Registration.CREATIVE_GENERATOR_BE.get(), pos, state);
+        super(ModRegistry.CREATIVE_GENERATOR_BE.get(), pos, state);
     }
 
     @Override
@@ -99,33 +97,6 @@ public class CreativeGeneratorBE extends BlockEntity {
             if (!doContinue) break;
         }
     }
-
-//    private void sendEnergy() {
-//        for (BlockEntity be : WirelessEnergyStorage.get().getUsers()) {
-//            AtomicInteger capacity = new AtomicInteger(energyStorage.getEnergyStored());
-//
-//            if (capacity.get() > 0) {
-//                for (Direction side : Direction.values()) {
-//                    boolean doContinue = be.getCapability(ForgeCapabilities.ENERGY, side).map(handler -> {
-//                                if (handler.canReceive()) {
-//                                    int received = handler.receiveEnergy(Math.min(capacity.get(), energyStorage.getMaxTransfer()), false);
-//                                    capacity.addAndGet(-received);
-//                                    energyStorage.consumeEnergy(received);
-//                                    setChanged();
-//                                    return capacity.get() > 0;
-//                                } else {
-//                                    return true;
-//                                }
-//                            }
-//                    ).orElse(true);
-//
-//                    if (!doContinue) break;
-//                }
-//            } else {
-//                break;
-//            }
-//        }
-//    }
 
     @Override
     public void load(CompoundTag tag) {

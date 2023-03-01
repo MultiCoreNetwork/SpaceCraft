@@ -1,9 +1,12 @@
 package it.multicoredev.spacecraft;
 
+import it.multicoredev.spacecraft.setup.ClientSetup;
 import it.multicoredev.spacecraft.setup.ModSetup;
 import it.multicoredev.spacecraft.setup.config.Config;
-import it.multicoredev.spacecraft.setup.registries.Registration;
+import it.multicoredev.spacecraft.setup.registries.ModRegistry;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -48,12 +51,11 @@ public class SpaceCraft {
 
     public SpaceCraft() {
         ModSetup.setup();
-        Registration.init();
+        ModRegistry.init();
         Config.register();
 
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(ModSetup::init);
-        //DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> bus.addListener(ClientSetup::init));
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> bus.addListener(ClientSetup::init));
     }
-
 }

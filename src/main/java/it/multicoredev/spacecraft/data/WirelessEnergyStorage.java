@@ -44,9 +44,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class WirelessEnergyStorage {
     private static WirelessEnergyStorage instance;
-    private static Random rand = new Random();
+    private static final Random rand = new Random();
     private final ScheduledExecutorService SCHEDULER = Executors.newScheduledThreadPool(64);
-    private Map<BlockPos, BlockEntity> energyUsers = new HashMap<>();
+    private final Map<BlockPos, BlockEntity> energyUsers = new HashMap<>();
 
     private WirelessEnergyStorage() {
     }

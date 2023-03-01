@@ -52,6 +52,7 @@ public class CreativeGenerator extends Block implements EntityBlock {
         super(BlockBehaviour.Properties.of(Material.METAL)
                 .sound(SoundType.METAL)
                 .strength(2, 2.4F)
+                .lightLevel(state -> state.getValue(BlockStateProperties.POWERED) ? 5 : 0)
                 .requiresCorrectToolForDrops());
     }
 
@@ -75,11 +76,16 @@ public class CreativeGenerator extends Block implements EntityBlock {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-        return this.defaultBlockState().setValue(BlockStateProperties.FACING, ctx.getNearestLookingDirection().getOpposite());
+        return this.defaultBlockState()
+                .setValue(BlockStateProperties.FACING, ctx.getNearestLookingDirection().getOpposite())
+                .setValue(BlockStateProperties.POWERED, true);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+
         builder.add(BlockStateProperties.FACING);
+        builder.add(BlockStateProperties.POWERED);
     }
 }

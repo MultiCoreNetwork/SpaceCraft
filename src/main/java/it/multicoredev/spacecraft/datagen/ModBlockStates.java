@@ -3,10 +3,8 @@ package it.multicoredev.spacecraft.datagen;
 import it.multicoredev.spacecraft.SpaceCraft;
 import it.multicoredev.spacecraft.utils.RegistryHelper;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
 
 /**
  * BSD 3-Clause License
@@ -49,8 +47,7 @@ public class ModBlockStates extends BlockStateProvider {
         RegistryHelper.getDataGenFields().forEach(br -> br.registerBlockstates(this));
     }
 
-    public void simpleBlock(RegistryObject<? extends Block> rb) {
-        Block block = rb.get();
-        simpleBlock(block, models().cubeAll(rb.getId().getPath(), modLoc("block/" + rb.getId().getPath())));
+    public void machine() {
+
     }
 }
