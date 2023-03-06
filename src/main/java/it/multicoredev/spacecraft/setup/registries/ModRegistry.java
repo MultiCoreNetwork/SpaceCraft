@@ -2,18 +2,20 @@ package it.multicoredev.spacecraft.setup.registries;
 
 import it.multicoredev.spacecraft.blocks.generators.creative.CreativeGenerator;
 import it.multicoredev.spacecraft.blocks.generators.creative.CreativeGeneratorBE;
-import it.multicoredev.spacecraft.inventory.OxygenInventoryMenu;
 import it.multicoredev.spacecraft.setup.ModSetup;
 import it.multicoredev.spacecraft.utils.DataGen;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -70,23 +72,22 @@ public class ModRegistry {
         return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), new Item.Properties().tab(ModSetup.SPACECRAFT_TAB)));
     }
 
-    public static final RegistryObject<MenuType<OxygenInventoryMenu>> OXYGEN_INVENTORY_MENU = MENUS.register("oxygen_inventory", () -> IForgeMenuType.create((w, i, b) -> {
-        throw new UnsupportedOperationException();
-    }));
-    public static final RegistryObject<MenuType<OxygenInventoryMenu>> TEST_INVENTORY_MENU = MENUS.register("test_inventory", () -> IForgeMenuType.create((w, i, b) -> {
-        throw new UnsupportedOperationException();
-    }));
-
     @DataGen
     public static final BlockBase<Block> TEST = BlockBase.create("test", BlockBehaviour.Properties.copy(Blocks.STONE)).setName("Test");
 
+/*    @DataGen
+    public static TagKey<Item> OXYGEN_TANK_TAG = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("curios", "oxygen_tank"));*/
     @DataGen
-    public static final BlockBase<CreativeGenerator> CREATIVE_GENERATOR = new BlockBase<>("creative_generator", CreativeGenerator::new) {
+    public static final ItemBase OXYGEN_TANK = new ItemBase("oxygen_tank", new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)).setName("Oxygen Tank");
+
+    @DataGen
+    public static final BlockBase<CreativeGenerator> CREATIVE_GENERATOR = new BlockBase<>("creative_generator", CreativeGenerator::new)
+/*    public static final BlockBase<CreativeGenerator> CREATIVE_GENERATOR = new BlockBase<>("creative_generator", CreativeGenerator::new) {
         @Override
         public void registerBlockstates(BlockStateProvider provider) {
             //TODO register blockstates
         }
-    }
-            .setName("Creative Generator");
+    }*/
+    .setName("Creative Generator");
     public static final RegistryObject<BlockEntityType<CreativeGeneratorBE>> CREATIVE_GENERATOR_BE = BLOCK_ENTITIES.register(CREATIVE_GENERATOR.getRegistryName(), () -> BlockEntityType.Builder.of(CreativeGeneratorBE::new, CREATIVE_GENERATOR.getBlock()).build(null));
 }

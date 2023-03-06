@@ -1,6 +1,5 @@
 package it.multicoredev.spacecraft;
 
-import it.multicoredev.spacecraft.setup.ClientSetup;
 import it.multicoredev.spacecraft.setup.ModSetup;
 import it.multicoredev.spacecraft.setup.config.Config;
 import it.multicoredev.spacecraft.setup.registries.ModRegistry;
@@ -56,6 +55,6 @@ public class SpaceCraft {
 
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(ModSetup::init);
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> bus.addListener(ClientSetup::init));
+        bus.addListener(ModSetup::imcEnqueue);
     }
 }

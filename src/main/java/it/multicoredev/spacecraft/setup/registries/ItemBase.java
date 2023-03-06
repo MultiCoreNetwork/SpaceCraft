@@ -102,7 +102,6 @@ public class ItemBase implements BaseRegistry {
         return this;
     }
 
-
     @Override
     public void registerBlockstates(BlockStateProvider provider) {
         throw new UnsupportedOperationException("Cannot register blockstates for an item");

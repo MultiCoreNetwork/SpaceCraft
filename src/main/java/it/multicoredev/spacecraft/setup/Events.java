@@ -5,6 +5,7 @@ import it.multicoredev.spacecraft.data.WirelessEnergyStorage;
 import it.multicoredev.spacecraft.utils.EnergyUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.EventPriority;

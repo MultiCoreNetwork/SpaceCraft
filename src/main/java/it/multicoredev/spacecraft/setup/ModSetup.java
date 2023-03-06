@@ -1,13 +1,18 @@
 package it.multicoredev.spacecraft.setup;
 
 import it.multicoredev.spacecraft.SpaceCraft;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import top.theillusivec4.curios.api.SlotTypeMessage;
 
 /**
  * BSD 3-Clause License
@@ -50,6 +55,11 @@ public class ModSetup {
 
     public static void setup() {
         IEventBus bus = MinecraftForge.EVENT_BUS;
+    }
+
+    // textures/gui/empty_oxygen_tank_slot.png
+    public static void imcEnqueue(InterModEnqueueEvent event) {
+        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("oxygen_tank").icon(new ResourceLocation(SpaceCraft.MODID, "gui/empty_oxygen_tank_slot")).size(1).build());
     }
 
     public static void init(FMLCommonSetupEvent event) {
