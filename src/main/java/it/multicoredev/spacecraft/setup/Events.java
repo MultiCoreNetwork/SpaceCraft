@@ -5,9 +5,9 @@ import it.multicoredev.spacecraft.data.WirelessEnergyStorage;
 import it.multicoredev.spacecraft.utils.EnergyUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.ChunkEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -72,5 +72,10 @@ public class Events {
     @SubscribeEvent
     public static void onChunkUnload(ChunkEvent.Unload event) {
         wirelessEnergyStorage.unloadFromChunk(event.getChunk(), event.getLevel());
+    }
+
+    @SubscribeEvent
+    public static void onLevelUnload(LevelEvent.Unload event) {
+        wirelessEnergyStorage.empty();
     }
 }

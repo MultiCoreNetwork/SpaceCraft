@@ -1,16 +1,9 @@
-package it.multicoredev.spacecraft.datagen;
-
-import it.multicoredev.spacecraft.SpaceCraft;
-import it.multicoredev.spacecraft.setup.registries.BlockRegistry;
-import it.multicoredev.spacecraft.utils.RegistryHelper;
-import net.minecraft.data.DataGenerator;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
+package it.multicoredev.spacecraft.setup.registries;
 
 /**
  * BSD 3-Clause License
  * <p>
- * Copyright (c) 2023, Lorenzo Magni, Kevin Delugan, Isaia Tonini, Valerio Collura
+ * Copyright (c) 2023, Lorenzo Magni
  * <p>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -37,17 +30,5 @@ import net.minecraftforge.common.data.ExistingFileHelper;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class ModBlockStates extends BlockStateProvider {
-
-    public ModBlockStates(DataGenerator gen, ExistingFileHelper helper) {
-        super(gen, SpaceCraft.MODID, helper);
-    }
-
-    @Override
-    protected void registerStatesAndModels() {
-        RegistryHelper.getDataGenFields()
-                .stream()
-                .filter(br -> br instanceof BlockRegistry)
-                .forEach(br -> ((BlockRegistry) br).registerBlockstates(this));
-    }
+public interface ItemRegistry extends BaseRegistry {
 }

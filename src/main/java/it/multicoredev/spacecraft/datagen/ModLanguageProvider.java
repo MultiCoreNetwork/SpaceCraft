@@ -44,6 +44,7 @@ public class ModLanguageProvider extends LanguageProvider {
     @Override
     protected void addTranslations() {
         add("itemGroup." + SpaceCraft.MODID, "SpaceCraft");
+        add("curios.identifier.oxygen_tank", "Oxygen Tank");
 
         RegistryHelper.getDataGenFields().forEach(br -> br.registerToLanguage(this));
     }

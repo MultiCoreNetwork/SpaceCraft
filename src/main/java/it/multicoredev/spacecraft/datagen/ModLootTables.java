@@ -1,6 +1,7 @@
 package it.multicoredev.spacecraft.datagen;
 
 import it.multicoredev.spacecraft.setup.registries.BaseRegistry;
+import it.multicoredev.spacecraft.setup.registries.BlockRegistry;
 import it.multicoredev.spacecraft.utils.RegistryHelper;
 import net.minecraft.data.DataGenerator;
 
@@ -42,6 +43,9 @@ public class ModLootTables extends BaseLootTableProvider {
 
     @Override
     protected void addTables() {
-        RegistryHelper.getDataGenFields().forEach(BaseRegistry::registerLootTables);
+        RegistryHelper.getDataGenFields()
+                .stream()
+                .filter(br -> br instanceof BlockRegistry)
+                .forEach(br -> ((BlockRegistry) br).registerLootTables());
     }
 }

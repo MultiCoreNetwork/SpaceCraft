@@ -1,6 +1,7 @@
 package it.multicoredev.spacecraft.datagen;
 
 import it.multicoredev.spacecraft.SpaceCraft;
+import it.multicoredev.spacecraft.setup.registries.BlockRegistry;
 import it.multicoredev.spacecraft.utils.RegistryHelper;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
@@ -44,7 +45,10 @@ public class ModBlockTags extends BlockTagsProvider {
 
     @Override
     protected void addTags() {
-        RegistryHelper.getDataGenFields().forEach(br -> br.getBlockTags().forEach((tag, block) -> tag(tag).add(block)));
+        RegistryHelper.getDataGenFields()
+                .stream()
+                .filter(br -> br instanceof BlockRegistry)
+                .forEach(br -> ((BlockRegistry) br).getBlockTags().forEach((tag, block) -> tag(tag).add(block.get())));
     }
 
     @Override

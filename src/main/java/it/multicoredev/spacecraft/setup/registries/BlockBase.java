@@ -51,14 +51,14 @@ import static it.multicoredev.spacecraft.setup.registries.ModRegistry.fromBlock;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class BlockBase<T extends Block> implements BaseRegistry {
+public class BlockBase<T extends Block> implements BlockRegistry {
     protected final String name;
     protected final RegistryObject<T> block;
     protected final RegistryObject<Item> blockItem;
     protected final List<String> lang = new ArrayList<>();
     protected final List<RecipeBuilder> recipes = new ArrayList<>();
-    protected final Map<TagKey<Block>, Block> blockTags = new HashMap<>();
-    protected final Map<TagKey<Item>, Item> itemTags = new HashMap<>();
+    protected final Map<TagKey<Block>, RegistryObject<? extends Block>> blockTags = new HashMap<>();
+    protected final Map<TagKey<Item>, RegistryObject<Item>> itemTags = new HashMap<>();
 
     public BlockBase(String name, Supplier<T> blockSupplier) {
         this.name = name;
@@ -112,13 +112,13 @@ public class BlockBase<T extends Block> implements BaseRegistry {
 
     @Override
     public BlockBase<T> addBlockTags(TagKey<Block>... tags) {
-        for (TagKey<Block> tag : tags) blockTags.put(tag, getBlock());
+        for (TagKey<Block> tag : tags) blockTags.put(tag, block);
         return this;
     }
 
     @Override
     public BlockBase<T> addItemTags(TagKey<Item>... tags) {
-        for (TagKey<Item> tag : tags) itemTags.put(tag, getBlockItem());
+        for (TagKey<Item> tag : tags) itemTags.put(tag, blockItem);
         return this;
     }
 
@@ -199,12 +199,12 @@ public class BlockBase<T extends Block> implements BaseRegistry {
     }
 
     @Override
-    public Map<TagKey<Block>, Block> getBlockTags() {
+    public Map<TagKey<Block>, RegistryObject<? extends Block>> getBlockTags() {
         return blockTags;
     }
 
     @Override
-    public Map<TagKey<Item>, Item> getItemTags() {
+    public Map<TagKey<Item>, RegistryObject<Item>> getItemTags() {
         return itemTags;
     }
 

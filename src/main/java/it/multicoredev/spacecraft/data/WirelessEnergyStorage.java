@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -44,7 +43,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class WirelessEnergyStorage {
     private static WirelessEnergyStorage instance;
-    private static final Random rand = new Random();
+
     private final ScheduledExecutorService SCHEDULER = Executors.newScheduledThreadPool(64);
     private final Map<BlockPos, BlockEntity> energyUsers = new HashMap<>();
 
@@ -62,6 +61,10 @@ public class WirelessEnergyStorage {
 
     public void removeUser(BlockPos pos) {
         energyUsers.remove(pos);
+    }
+
+    public void empty() {
+        energyUsers.clear();
     }
 
     public void loadFromChunk(ChunkAccess chunk, LevelAccessor level) {
@@ -90,14 +93,7 @@ public class WirelessEnergyStorage {
         }, 0, TimeUnit.NANOSECONDS);
     }
 
-    public Collection<BlockEntity> getUsers() {
-        return energyUsers.values();
+    public List<BlockEntity> getUsers() {
+        return new ArrayList<>(energyUsers.values());
     }
-
-    @Nullable
-    public BlockEntity getRandomUser() {
-        if (energyUsers.isEmpty()) return null;
-        return (BlockEntity) energyUsers.values().toArray()[rand.nextInt(energyUsers.size())];
-    }
-
 }

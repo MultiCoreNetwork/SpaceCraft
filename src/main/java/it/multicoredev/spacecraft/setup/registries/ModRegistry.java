@@ -6,6 +6,8 @@ import it.multicoredev.spacecraft.setup.ModSetup;
 import it.multicoredev.spacecraft.utils.DataGen;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
@@ -73,14 +75,13 @@ public class ModRegistry {
     }
 
     @DataGen
-    public static final BlockBase<Block> TEST = BlockBase.create("test", BlockBehaviour.Properties.copy(Blocks.STONE)).setName("Test");
+    public static final BlockBase<Block> TEST = BlockBase.create("test", BlockBehaviour.Properties.copy(Blocks.STONE)).setName("Test").addBlockTags(BlockTags.MINEABLE_WITH_PICKAXE);
 
-/*    @DataGen
-    public static TagKey<Item> OXYGEN_TANK_TAG = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("curios", "oxygen_tank"));*/
+    public static TagKey<Item> OXYGEN_TANK_TAG = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("curios", "oxygen_tank"));
     @DataGen
-    public static final ItemBase OXYGEN_TANK = new ItemBase("oxygen_tank", new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)).setName("Oxygen Tank");
+    public static final ItemBase OXYGEN_TANK = new ItemBase("oxygen_tank", new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)).setName("Oxygen Tank").addItemTags(OXYGEN_TANK_TAG);
 
-    @DataGen
+    //@DataGen
     public static final BlockBase<CreativeGenerator> CREATIVE_GENERATOR = new BlockBase<>("creative_generator", CreativeGenerator::new)
 /*    public static final BlockBase<CreativeGenerator> CREATIVE_GENERATOR = new BlockBase<>("creative_generator", CreativeGenerator::new) {
         @Override

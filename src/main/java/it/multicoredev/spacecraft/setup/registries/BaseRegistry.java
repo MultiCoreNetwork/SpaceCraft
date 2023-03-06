@@ -5,9 +5,8 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Collection;
 import java.util.Map;
@@ -50,12 +49,7 @@ public interface BaseRegistry {
 
     BaseRegistry addRecipes(Collection<? extends RecipeBuilder> recipes);
 
-    BaseRegistry addBlockTags(TagKey<Block>... tags);
-
     BaseRegistry addItemTags(TagKey<Item>... tags);
-
-
-    void registerBlockstates(BlockStateProvider provider);
 
     void registerModels(ItemModelProvider provider);
 
@@ -63,9 +57,5 @@ public interface BaseRegistry {
 
     void registerToLanguage(ModLanguageProvider provider);
 
-    Map<TagKey<Block>, Block> getBlockTags();
-
-    Map<TagKey<Item>, Item> getItemTags();
-
-    void registerLootTables();
+    Map<TagKey<Item>, RegistryObject<Item>> getItemTags();
 }

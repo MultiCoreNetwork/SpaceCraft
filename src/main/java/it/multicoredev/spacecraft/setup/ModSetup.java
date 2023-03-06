@@ -57,9 +57,12 @@ public class ModSetup {
         IEventBus bus = MinecraftForge.EVENT_BUS;
     }
 
-    // textures/gui/empty_oxygen_tank_slot.png
+    // textures/gui/oxygen_tank.png
     public static void imcEnqueue(InterModEnqueueEvent event) {
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("oxygen_tank").icon(new ResourceLocation(SpaceCraft.MODID, "gui/empty_oxygen_tank_slot")).size(1).build());
+        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("oxygen_tank")
+                .icon(new ResourceLocation(SpaceCraft.MODID, "gui/empty_oxygen_tank_slot"))
+                .size(1)
+                .build());
     }
 
     public static void init(FMLCommonSetupEvent event) {

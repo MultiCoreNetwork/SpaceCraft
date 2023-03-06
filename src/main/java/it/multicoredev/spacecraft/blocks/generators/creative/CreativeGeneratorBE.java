@@ -1,5 +1,6 @@
 package it.multicoredev.spacecraft.blocks.generators.creative;
 
+import it.multicoredev.spacecraft.SpaceCraft;
 import it.multicoredev.spacecraft.data.WirelessEnergyStorage;
 import it.multicoredev.spacecraft.setup.registries.ModRegistry;
 import it.multicoredev.spacecraft.utils.ModEnergyStorage;
@@ -15,6 +16,9 @@ import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -71,10 +75,29 @@ public class CreativeGeneratorBE extends BlockEntity {
         AtomicInteger capacity = new AtomicInteger(energyStorage.getEnergyStored());
         AtomicInteger energyTransfer = new AtomicInteger(energyStorage.getMaxTransfer());
 
+        List<BlockEntity> users = WirelessEnergyStorage.get().getUsers();
+        Collections.shuffle(users);
+
+        if (users.isEmpty()) return;
+
+        int index = 0;
+
         while (capacity.get() > 0 && energyTransfer.get() > 0) {
-            BlockEntity be = WirelessEnergyStorage.get().getRandomUser();
-            if (be == null) return;
-            sendEnergy(be, capacity, energyTransfer);
+            if (index >= users.size()) index = 0;
+
+            BlockEntity be = users.get(index);
+            if (be == null) {
+                index++;
+                continue;
+            }
+
+            try {
+                sendEnergy(be, capacity, energyTransfer);
+            } catch (Exception e) {
+                SpaceCraft.LOGGER.error("Failed to send energy", e);
+            }
+
+            index++;
         }
     }
 

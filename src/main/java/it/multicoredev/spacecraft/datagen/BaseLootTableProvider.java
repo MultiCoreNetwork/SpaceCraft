@@ -142,6 +142,6 @@ public abstract class BaseLootTableProvider extends LootTableProvider {
 
     @Override
     public String getName() {
-        return "Esosity LootTables";
+        return "SpaceCraft LootTables";
     }
 }

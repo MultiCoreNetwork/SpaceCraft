@@ -135,32 +135,32 @@ public class FullBlock extends BlockBase<Block> {
     }
 
     public FullBlock addSlabTags(TagKey<Block>... tags) {
-        for (TagKey<Block> tag : tags) blockTags.put(tag, getSlab());
+        for (TagKey<Block> tag : tags) blockTags.put(tag, slab);
         return this;
     }
 
     public FullBlock addStairsTags(TagKey<Block>... tags) {
-        for (TagKey<Block> tag : tags) blockTags.put(tag, getStairs());
+        for (TagKey<Block> tag : tags) blockTags.put(tag, stairs);
         return this;
     }
 
     public FullBlock addWallTags(TagKey<Block>... tags) {
-        for (TagKey<Block> tag : tags) blockTags.put(tag, getWall());
+        for (TagKey<Block> tag : tags) blockTags.put(tag, wall);
         return this;
     }
 
     public FullBlock addSlabItemTags(TagKey<Item>... tags) {
-        for (TagKey<Item> tag : tags) itemTags.put(tag, getSlabItem());
+        for (TagKey<Item> tag : tags) itemTags.put(tag, slabItem);
         return this;
     }
 
     public FullBlock addStairsItemTags(TagKey<Item>... tags) {
-        for (TagKey<Item> tag : tags) itemTags.put(tag, getStairsItem());
+        for (TagKey<Item> tag : tags) itemTags.put(tag, stairsItem);
         return this;
     }
 
     public FullBlock addWallItemTags(TagKey<Item>... tags) {
-        for (TagKey<Item> tag : tags) itemTags.put(tag, getWallItem());
+        for (TagKey<Item> tag : tags) itemTags.put(tag, wallItem);
         return this;
     }
 

@@ -7,8 +7,6 @@ import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -48,12 +46,12 @@ import static it.multicoredev.spacecraft.setup.registries.ModRegistry.ITEMS;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class ItemBase implements BaseRegistry {
+public class ItemBase implements ItemRegistry {
     protected final String name;
     protected final RegistryObject<Item> item;
     protected final List<String> lang = new ArrayList<>();
     protected final List<RecipeBuilder> recipes = new ArrayList<>();
-    protected final Map<TagKey<Item>, Item> itemTags = new HashMap<>();
+    protected final Map<TagKey<Item>, RegistryObject<Item>> itemTags = new HashMap<>();
 
     public ItemBase(String name, Item.Properties properties) {
         this.name = name;
@@ -92,19 +90,9 @@ public class ItemBase implements BaseRegistry {
     }
 
     @Override
-    public ItemBase addBlockTags(TagKey<Block>... tags) {
-        throw new UnsupportedOperationException("Cannot add block tags to an item");
-    }
-
-    @Override
     public ItemBase addItemTags(TagKey<Item>... tags) {
-        for (TagKey<Item> tag : tags) itemTags.put(tag, getItem());
+        for (TagKey<Item> tag : tags) itemTags.put(tag, item);
         return this;
-    }
-
-    @Override
-    public void registerBlockstates(BlockStateProvider provider) {
-        throw new UnsupportedOperationException("Cannot register blockstates for an item");
     }
 
     @Override
@@ -178,16 +166,7 @@ public class ItemBase implements BaseRegistry {
     }
 
     @Override
-    public Map<TagKey<Block>, Block> getBlockTags() {
-        return new HashMap<>();
-    }
-
-    @Override
-    public Map<TagKey<Item>, Item> getItemTags() {
+    public Map<TagKey<Item>, RegistryObject<Item>> getItemTags() {
         return itemTags;
-    }
-
-    @Override
-    public void registerLootTables() {
     }
 }

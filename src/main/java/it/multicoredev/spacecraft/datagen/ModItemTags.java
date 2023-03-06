@@ -45,7 +45,7 @@ public class ModItemTags extends ItemTagsProvider {
 
     @Override
     protected void addTags() {
-        RegistryHelper.getDataGenFields().forEach(br -> br.getItemTags().forEach((tag, item) -> tag(tag).add(item)));
+        RegistryHelper.getDataGenFields().forEach(br -> br.getItemTags().forEach((tag, item) -> tag(tag).add(item.get())));
     }
 
     @Override
