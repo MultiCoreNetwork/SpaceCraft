@@ -3,6 +3,7 @@ package it.multicoredev.spacecraft.blocks.generators.creative;
 import it.multicoredev.spacecraft.SpaceCraft;
 import it.multicoredev.spacecraft.data.WirelessEnergyStorage;
 import it.multicoredev.spacecraft.setup.registries.ModRegistry;
+import it.multicoredev.spacecraft.utils.EnergyUtil;
 import it.multicoredev.spacecraft.utils.ModEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -52,7 +53,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 public class CreativeGeneratorBE extends BlockEntity {
-    private final ModEnergyStorage energyStorage = new ModEnergyStorage(4096, 512);
+    private final ModEnergyStorage energyStorage = createEnergyStorage();
     private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
 
     public CreativeGeneratorBE(BlockPos pos, BlockState state) {
@@ -66,59 +67,9 @@ public class CreativeGeneratorBE extends BlockEntity {
     }
 
     public void tickServer() {
-        energyStorage.addEnergy(4);
+        energyStorage.addEnergy(4); //TODO Move to config
         setChanged();
-        sendEnergy();
-    }
-
-    private void sendEnergy() {
-        AtomicInteger capacity = new AtomicInteger(energyStorage.getEnergyStored());
-        AtomicInteger energyTransfer = new AtomicInteger(energyStorage.getMaxTransfer());
-
-        List<BlockEntity> users = WirelessEnergyStorage.get().getUsers();
-        Collections.shuffle(users);
-
-        if (users.isEmpty()) return;
-
-        int index = 0;
-
-        while (capacity.get() > 0 && energyTransfer.get() > 0) {
-            if (index >= users.size()) index = 0;
-
-            BlockEntity be = users.get(index);
-            if (be == null) {
-                index++;
-                continue;
-            }
-
-            try {
-                sendEnergy(be, capacity, energyTransfer);
-            } catch (Exception e) {
-                SpaceCraft.LOGGER.error("Failed to send energy", e);
-            }
-
-            index++;
-        }
-    }
-
-    private void sendEnergy(BlockEntity be, AtomicInteger capacity, AtomicInteger energyTransfer) {
-        for (Direction side : Direction.values()) {
-            boolean doContinue = be.getCapability(ForgeCapabilities.ENERGY, side).map(handler -> {
-                        if (handler.canReceive()) {
-                            int received = handler.receiveEnergy(Math.min(capacity.get(), energyTransfer.get()), false);
-                            capacity.addAndGet(-received);
-                            energyTransfer.addAndGet(-received);
-                            energyStorage.consumeEnergy(received);
-                            setChanged();
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }
-            ).orElse(true);
-
-            if (!doContinue) break;
-        }
+        EnergyUtil.sendEnergy(this, energyStorage);
     }
 
     @Override
@@ -137,5 +88,14 @@ public class CreativeGeneratorBE extends BlockEntity {
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.ENERGY) return energy.cast();
         return super.getCapability(cap, side);
+    }
+
+    private ModEnergyStorage createEnergyStorage() {
+        return new ModEnergyStorage(4096, 512) { //TODO Move to config
+            @Override
+            protected void onEnergyChanged() {
+                setChanged();
+            }
+        };
     }
 }

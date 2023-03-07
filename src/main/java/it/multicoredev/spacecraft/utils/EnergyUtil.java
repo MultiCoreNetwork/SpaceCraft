@@ -1,5 +1,7 @@
 package it.multicoredev.spacecraft.utils;
 
+import it.multicoredev.spacecraft.SpaceCraft;
+import it.multicoredev.spacecraft.data.WirelessEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelAccessor;
@@ -7,7 +9,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * BSD 3-Clause License
@@ -61,6 +66,56 @@ public class EnergyUtil {
 
         if (canReceive.get()) return be;
         return null;
+    }
+
+    public static void sendEnergy(BlockEntity generator, ModEnergyStorage energyStorage) {
+        /*AtomicInteger capacity = new AtomicInteger(energyStorage.getEnergyStored());
+        AtomicInteger energyTransfer = new AtomicInteger(energyStorage.getMaxTransfer());
+
+        List<BlockEntity> users = WirelessEnergyStorage.get().getUsers();
+        Collections.shuffle(users);
+
+        if (users.isEmpty()) return;
+
+        int index = 0;
+
+        while (capacity.get() > 0 && energyTransfer.get() > 0) {
+            if (index >= users.size()) index = 0;
+
+            BlockEntity be = users.get(index);
+            if (be == null) {
+                index++;
+                continue;
+            }
+
+            try {
+                sendEnergy(generator, energyStorage, be, capacity, energyTransfer);
+            } catch (Exception e) {
+                SpaceCraft.LOGGER.error("Failed to send energy", e);
+            }
+
+            index++;
+        }*/
+    }
+
+    private static void sendEnergy(BlockEntity generator, ModEnergyStorage energyStorage, BlockEntity be, AtomicInteger capacity, AtomicInteger energyTransfer) {
+        for (Direction side : Direction.values()) {
+            boolean doContinue = be.getCapability(ForgeCapabilities.ENERGY, side).map(handler -> {
+                        if (handler.canReceive()) {
+                            int received = handler.receiveEnergy(Math.min(capacity.get(), energyTransfer.get()), false);
+                            capacity.addAndGet(-received);
+                            energyTransfer.addAndGet(-received);
+                            energyStorage.consumeEnergy(received);
+                            generator.setChanged();
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+            ).orElse(true);
+
+            if (!doContinue) break;
+        }
     }
 
 }
