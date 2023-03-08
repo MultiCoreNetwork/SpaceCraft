@@ -57,7 +57,6 @@ public class FurnaceGeneratorScreen extends AbstractContainerScreen<FurnaceGener
     @Override
     protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
         drawString(matrixStack, Minecraft.getInstance().font, title, 4, 4, 0xffffff);
-        //drawString(matrixStack, Minecraft.getInstance().font, "Energy: " + menu.getEnergy(), 10, 10, 0xffffff); //TODO Localize
     }
 
     @Override
@@ -65,9 +64,29 @@ public class FurnaceGeneratorScreen extends AbstractContainerScreen<FurnaceGener
         RenderSystem.setShaderTexture(0, GUI);
         int relX = (this.width - this.imageWidth) / 2;
         int relY = (this.height - this.imageHeight) / 2;
-        //                                                             width,        height
-        this.blit(matrixStack, relX, relY, 0, 0, 180, 152);
+        this.blit(matrixStack, relX, relY, 0, 0, 176, 166);
+
+        // this.blit(matrixStack, xCoord, yCoord, uCoord, vCoord, width, height);
+        if (menu.isPowered()) {
+            int burnTime = getBurnTimeScaled(14);
+            this.blit(matrixStack, relX + 27, relY + 46 + burnTime, 176, 0, 14, 14 - burnTime);
+        }
+
+        int energy = getEnergyScaled(42);
+        this.blit(matrixStack, relX + 137, relY + 22 + (42 - energy), 176, 14 + (42 - energy), 14, energy);
     }
 
+    private int getBurnTimeScaled(int pixels) {
+        int burnTime = menu.getBurnTime();
+        int maxBurnTime = menu.getMaxBurnTime();
 
+        return maxBurnTime != 0 ? burnTime * pixels / maxBurnTime : 0;
+    }
+
+    private int getEnergyScaled(int pixels) {
+        int energy = menu.getEnergy();
+        int maxEnergy = menu.getMaxEnergy();
+
+        return maxEnergy != 0 ? energy * pixels / maxEnergy : 0;
+    }
 }

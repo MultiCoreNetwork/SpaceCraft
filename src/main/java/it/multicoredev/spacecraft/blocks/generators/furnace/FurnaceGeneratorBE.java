@@ -59,14 +59,19 @@ public class FurnaceGeneratorBE extends BlockEntity {
     private final ModEnergyStorage energyStorage = createEnergyStorage();
     private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
 
-    private int counter;
+    private int burnTime;
+    private int maxBurnTime;
 
     public FurnaceGeneratorBE(BlockPos pos, BlockState state) {
         super(ModRegistry.FURNACE_GENERATOR_BE.get(), pos, state);
     }
 
-    public int getCounter() {
-        return counter;
+    public int getBurnTime() {
+        return burnTime;
+    }
+
+    public int getMaxBurnTime() {
+        return maxBurnTime;
     }
 
     @Override
@@ -77,25 +82,30 @@ public class FurnaceGeneratorBE extends BlockEntity {
     }
 
     public void tickServer() {
-        if (counter > 0) {
+        if (burnTime < maxBurnTime) {
             energyStorage.addEnergy(40); //TODO Move to config
-            counter--;
+            burnTime++;
             setChanged();
         }
 
-        if (counter <= 0) {
+        if (burnTime >= maxBurnTime) {
             ItemStack stack = itemHandler.getStackInSlot(0);
-            int burnTime = ForgeHooks.getBurnTime(stack, RecipeType.SMELTING);
-            if (burnTime > 0) {
+            int newBurnTime = ForgeHooks.getBurnTime(stack, RecipeType.SMELTING);
+
+            if (newBurnTime > 0) {
                 itemHandler.extractItem(0, 1, false);
-                counter = burnTime;
-                setChanged();
+                maxBurnTime = newBurnTime;
+            } else {
+                maxBurnTime = 0;
             }
+
+            burnTime = 0;
+            setChanged();
         }
 
-        BlockState blockState = level.getBlockState(worldPosition);
-        if (blockState.getValue(BlockStateProperties.POWERED) != counter > 0) {
-            level.setBlock(worldPosition, blockState.setValue(BlockStateProperties.POWERED, counter > 0), Block.UPDATE_ALL);
+        BlockState state = level.getBlockState(worldPosition);
+        if (state.getValue(BlockStateProperties.POWERED) != burnTime < maxBurnTime) {
+            level.setBlock(worldPosition, state.setValue(BlockStateProperties.POWERED, burnTime < maxBurnTime), Block.UPDATE_ALL);
         }
 
         EnergyUtil.sendEnergy(this, energyStorage);
@@ -105,7 +115,11 @@ public class FurnaceGeneratorBE extends BlockEntity {
     public void load(CompoundTag tag) {
         if (tag.contains("Inventory")) itemHandler.deserializeNBT(tag.getCompound("Inventory"));
         if (tag.contains("Energy")) energyStorage.deserializeNBT(tag.get("Energy"));
-        if (tag.contains("Info")) counter = tag.getCompound("Info").getInt("Counter");
+        if (tag.contains("Info")) {
+            CompoundTag infoTag = tag.getCompound("Info");
+            burnTime = infoTag.getInt("BurnTime");
+            maxBurnTime = infoTag.getInt("MaxBurnTime");
+        }
 
         super.load(tag);
     }
@@ -116,7 +130,8 @@ public class FurnaceGeneratorBE extends BlockEntity {
         tag.put("Energy", energyStorage.serializeNBT());
 
         CompoundTag infoTag = new CompoundTag();
-        infoTag.putInt("Counter", counter);
+        infoTag.putInt("BurnTime", burnTime);
+        infoTag.putInt("MaxBurnTime", maxBurnTime);
         tag.put("Info", infoTag);
     }
 

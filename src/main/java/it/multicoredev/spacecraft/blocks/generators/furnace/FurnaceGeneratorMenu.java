@@ -63,10 +63,10 @@ public class FurnaceGeneratorMenu extends AbstractContainerMenu {
         this.playerInventory = new InvWrapper(playerInventory);
 
         if (blockEntity != null) {
-            blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h -> addSlot(new SlotItemHandler(h, 0, 28, 19)));
+            blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h -> addSlot(new SlotItemHandler(h, 0, 26, 26)));
         }
 
-        layoutPlayerInventorySlots(10, 71);
+        layoutPlayerInventorySlots(8, 84);
         trackData();
     }
 
@@ -102,11 +102,11 @@ public class FurnaceGeneratorMenu extends AbstractContainerMenu {
             }
         });
 
-        // Counter
+        // Max Energy
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return getCounter() & 0xffff;
+                return getMaxEnergy() & 0xffff;
             }
 
             @Override
@@ -117,7 +117,53 @@ public class FurnaceGeneratorMenu extends AbstractContainerMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return (getCounter() >> 16) & 0xffff;
+                return (getMaxEnergy() >> 16) & 0xffff;
+            }
+
+            @Override
+            public void set(int value) {
+            }
+        });
+
+        // BurnTime
+        addDataSlot(new DataSlot() {
+            @Override
+            public int get() {
+                return getBurnTime() & 0xffff;
+            }
+
+            @Override
+            public void set(int value) {
+            }
+        });
+
+        addDataSlot(new DataSlot() {
+            @Override
+            public int get() {
+                return (getBurnTime() >> 16) & 0xffff;
+            }
+
+            @Override
+            public void set(int value) {
+            }
+        });
+
+        // MaxBurnTime
+        addDataSlot(new DataSlot() {
+            @Override
+            public int get() {
+                return getMaxBurnTime() & 0xffff;
+            }
+
+            @Override
+            public void set(int value) {
+            }
+        });
+
+        addDataSlot(new DataSlot() {
+            @Override
+            public int get() {
+                return (getMaxBurnTime() >> 16) & 0xffff;
             }
 
             @Override
@@ -130,12 +176,20 @@ public class FurnaceGeneratorMenu extends AbstractContainerMenu {
         return blockEntity.getCapability(ForgeCapabilities.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
     }
 
+    public int getMaxEnergy() {
+        return blockEntity.getCapability(ForgeCapabilities.ENERGY).map(IEnergyStorage::getMaxEnergyStored).orElse(0);
+    }
+
     public boolean isPowered() {
         return blockEntity.getBlockState().getValue(BlockStateProperties.POWERED);
     }
 
-    public int getCounter() {
-        return ((FurnaceGeneratorBE) blockEntity).getCounter();
+    public int getBurnTime() {
+        return ((FurnaceGeneratorBE) blockEntity).getBurnTime();
+    }
+
+    public int getMaxBurnTime() {
+        return ((FurnaceGeneratorBE) blockEntity).getMaxBurnTime();
     }
 
     @Override
