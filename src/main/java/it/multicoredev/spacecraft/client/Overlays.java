@@ -1,14 +1,12 @@
-package it.multicoredev.spacecraft.setup.config;
+package it.multicoredev.spacecraft.client;
 
 import it.multicoredev.spacecraft.setup.config.client.OverlayConfig;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 /**
  * BSD 3-Clause License
  * <p>
- * Copyright (c) 2023, Lorenzo Magni, Kevin Delugan, Isaia Tonini, Valerio Collura
+ * Copyright (c) 2023, Lorenzo Magni
  * <p>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -35,34 +33,14 @@ import net.minecraftforge.fml.config.ModConfig;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class Config {
-    public static void register() {
-        registerServerConfigs();
-        registerClientConfigs();
-        registerCommonConfigs();
-    }
+public class Overlays {
+    public static final IGuiOverlay TERRAFORMING_HUD = (gui, poseStack, partialTicks, width, height) -> {
+        String toDisplay = "Terraforming";
+        int x = OverlayConfig.TERRAFORMING_HUD_X.get();
+        int y = OverlayConfig.TERRAFORMING_HUD_Y.get();
 
-    private static void registerServerConfigs() {
-        ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
-
-        FurnaceGeneratorConfig.registerServerConfig(SERVER_BUILDER);
-
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_BUILDER.build());
-    }
-
-    private static void registerClientConfigs() {
-        ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
-
-        OverlayConfig.registerClientConfig(CLIENT_BUILDER);
-
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_BUILDER.build());
-    }
-
-    private static void registerCommonConfigs() {
-        ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
-
-
-
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_BUILDER.build());
-    }
+        if (x >= 0 && y>= 0) {
+            gui.getFont().draw(poseStack, toDisplay, x, y, OverlayConfig.TERRAFORMING_HUD_COLOR.get());
+        }
+    };
 }

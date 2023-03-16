@@ -2,12 +2,14 @@ package it.multicoredev.spacecraft.setup.client;
 
 import it.multicoredev.spacecraft.SpaceCraft;
 import it.multicoredev.spacecraft.client.KeyInputHandler;
+import it.multicoredev.spacecraft.client.Overlays;
 import it.multicoredev.spacecraft.client.screens.FurnaceGeneratorScreen;
 import it.multicoredev.spacecraft.setup.registries.ModRegistry;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -61,6 +63,6 @@ public class ClientSetup {
 
     @SubscribeEvent
     public static void onRegisterOverlays(RegisterGuiOverlaysEvent event) {
-        //event.registerAbove(VanillaGuiOverlay.HOTBAR.id(), "mana_overlay", ManaOverlay.HUD_MANA);
+        event.registerAbove(VanillaGuiOverlay.HOTBAR.id(), "terraforming_overlay", Overlays.TERRAFORMING_HUD);
     }
 }

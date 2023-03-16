@@ -1,5 +1,6 @@
 package it.multicoredev.spacecraft.blocks.generators.furnace;
 
+import it.multicoredev.spacecraft.setup.config.FurnaceGeneratorConfig;
 import it.multicoredev.spacecraft.setup.registries.ModRegistry;
 import it.multicoredev.spacecraft.utils.EnergyUtil;
 import it.multicoredev.spacecraft.utils.ModEnergyStorage;
@@ -83,8 +84,8 @@ public class FurnaceGeneratorBE extends BlockEntity {
 
     public void tickServer() {
         if (burnTime < maxBurnTime) {
-            energyStorage.addEnergy(40); //TODO Move to config
-            burnTime++;
+            energyStorage.addEnergy(FurnaceGeneratorConfig.GENERATION.get());
+            burnTime += FurnaceGeneratorConfig.GENERATION.get();
             setChanged();
         }
 
@@ -145,7 +146,7 @@ public class FurnaceGeneratorBE extends BlockEntity {
     }
 
     private ModEnergyStorage createEnergyStorage() {
-        return new ModEnergyStorage(8192, 1024) { //TODO Move to config
+        return new ModEnergyStorage(FurnaceGeneratorConfig.CAPACITY.get(), FurnaceGeneratorConfig.MAX_TRANSFER.get()) {
             @Override
             protected void onEnergyChanged() {
                 setChanged();
