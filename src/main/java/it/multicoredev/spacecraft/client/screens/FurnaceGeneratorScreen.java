@@ -67,9 +67,11 @@ public class FurnaceGeneratorScreen extends AbstractContainerScreen<FurnaceGener
         this.blit(matrixStack, relX, relY, 0, 0, 176, 166);
 
         // this.blit(matrixStack, xCoord, yCoord, uCoord, vCoord, width, height);
-        if (menu.isPowered()) {
+        if (menu.isLit()) {
             int burnTime = getBurnTimeScaled(14);
             this.blit(matrixStack, relX + 27, relY + 46 + burnTime, 176, 0, 14, 14 - burnTime);
+        } else {
+            this.blit(matrixStack, relX + 27, relY + 46, 176, 0, 0, 0);
         }
 
         int energy = getEnergyScaled(42);

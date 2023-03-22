@@ -60,8 +60,8 @@ public class FurnaceGeneratorBE extends BlockEntity {
     private final ModEnergyStorage energyStorage = createEnergyStorage();
     private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
 
-    private int burnTime;
-    private int maxBurnTime;
+    private int burnTime = 0;
+    private int maxBurnTime = 0;
 
     public FurnaceGeneratorBE(BlockPos pos, BlockState state) {
         super(ModRegistry.FURNACE_GENERATOR_BE.get(), pos, state);
@@ -83,12 +83,6 @@ public class FurnaceGeneratorBE extends BlockEntity {
     }
 
     public void tickServer() {
-        if (burnTime < maxBurnTime) {
-            energyStorage.addEnergy(FurnaceGeneratorConfig.GENERATION.get());
-            burnTime += FurnaceGeneratorConfig.GENERATION.get();
-            setChanged();
-        }
-
         if (burnTime >= maxBurnTime) {
             ItemStack stack = itemHandler.getStackInSlot(0);
             int newBurnTime = ForgeHooks.getBurnTime(stack, RecipeType.SMELTING);
@@ -104,9 +98,18 @@ public class FurnaceGeneratorBE extends BlockEntity {
             setChanged();
         }
 
+        if (burnTime < maxBurnTime) {
+            int energyAdded = Math.min(energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored(), FurnaceGeneratorConfig.GENERATION.get());
+            energyStorage.addEnergy(energyAdded);
+            burnTime += energyAdded;
+            setChanged();
+        }
+
         BlockState state = level.getBlockState(worldPosition);
-        if (state.getValue(BlockStateProperties.POWERED) != burnTime < maxBurnTime) {
-            level.setBlock(worldPosition, state.setValue(BlockStateProperties.POWERED, burnTime < maxBurnTime), Block.UPDATE_ALL);
+        boolean powered = burnTime < maxBurnTime && energyStorage.getEnergyStored() < energyStorage.getMaxEnergyStored();
+
+        if (state.getValue(BlockStateProperties.LIT) != powered) {
+            level.setBlock(worldPosition, state.setValue(BlockStateProperties.LIT, powered), Block.UPDATE_ALL);
         }
 
         EnergyUtil.sendEnergy(this, energyStorage);

@@ -1,10 +1,14 @@
 package it.multicoredev.spacecraft.datagen;
 
 import it.multicoredev.spacecraft.SpaceCraft;
+import it.multicoredev.spacecraft.setup.registries.BlockBase;
 import it.multicoredev.spacecraft.setup.registries.BlockRegistry;
 import it.multicoredev.spacecraft.utils.RegistryHelper;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 /**
@@ -49,5 +53,23 @@ public class ModBlockStates extends BlockStateProvider {
                 .stream()
                 .filter(br -> br instanceof BlockRegistry)
                 .forEach(br -> ((BlockRegistry) br).registerBlockstates(this));
+    }
+
+    public void generatorBlock(BlockBase<?> block) {
+        getVariantBuilder(block.getBlock()).forAllStates(state -> {
+            boolean lit = state.getValue(BlockStateProperties.LIT);
+
+            String litSuffix = lit ? "_on" : "";
+
+            ModelFile model = models().withExistingParent(block.getRegistryName() + litSuffix, "block/orientable")
+                    .texture("front", "block/generators/" + block.getRegistryName() + "/front" + litSuffix)
+                    .texture("side", "block/generators/" + block.getRegistryName() + "/side" + litSuffix)
+                    .texture("top", "block/generators/" + block.getRegistryName() + "/top" + litSuffix)
+                    .texture("bottom", "block/generators/" + block.getRegistryName() + "/bottom" + litSuffix);
+
+            return ConfiguredModel.builder()
+                    .modelFile(model)
+                    .build();
+        });
     }
 }

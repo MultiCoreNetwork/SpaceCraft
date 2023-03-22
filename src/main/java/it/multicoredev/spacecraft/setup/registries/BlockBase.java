@@ -2,6 +2,7 @@ package it.multicoredev.spacecraft.setup.registries;
 
 import it.multicoredev.spacecraft.SpaceCraft;
 import it.multicoredev.spacecraft.datagen.BaseLootTableProvider;
+import it.multicoredev.spacecraft.datagen.ModBlockStates;
 import it.multicoredev.spacecraft.datagen.ModLanguageProvider;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
@@ -124,7 +125,7 @@ public class BlockBase<T extends Block> implements BlockRegistry {
 
 
     @Override
-    public void registerBlockstates(BlockStateProvider provider) {
+    public void registerBlockstates(ModBlockStates provider) {
         provider.simpleBlock(getBlock());
     }
 

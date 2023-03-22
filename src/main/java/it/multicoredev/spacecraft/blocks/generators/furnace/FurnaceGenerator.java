@@ -61,7 +61,7 @@ public class FurnaceGenerator extends Block implements EntityBlock {
         super(Properties.of(Material.METAL)
                 .sound(SoundType.METAL)
                 .strength(2, 2.4F)
-                .lightLevel(state -> state.getValue(BlockStateProperties.POWERED) ? 5 : 0)
+                .lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 5 : 0)
                 .requiresCorrectToolForDrops());
     }
 
@@ -87,7 +87,7 @@ public class FurnaceGenerator extends Block implements EntityBlock {
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return this.defaultBlockState()
                 .setValue(BlockStateProperties.FACING, ctx.getNearestLookingDirection().getOpposite())
-                .setValue(BlockStateProperties.POWERED, false);
+                .setValue(BlockStateProperties.LIT, false);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class FurnaceGenerator extends Block implements EntityBlock {
         super.createBlockStateDefinition(builder);
 
         builder.add(BlockStateProperties.FACING);
-        builder.add(BlockStateProperties.POWERED);
+        builder.add(BlockStateProperties.LIT);
     }
 
     @Override

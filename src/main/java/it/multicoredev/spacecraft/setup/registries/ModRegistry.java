@@ -5,6 +5,7 @@ import it.multicoredev.spacecraft.blocks.generators.creative.CreativeGeneratorBE
 import it.multicoredev.spacecraft.blocks.generators.furnace.FurnaceGenerator;
 import it.multicoredev.spacecraft.blocks.generators.furnace.FurnaceGeneratorBE;
 import it.multicoredev.spacecraft.blocks.generators.furnace.FurnaceGeneratorMenu;
+import it.multicoredev.spacecraft.datagen.ModBlockStates;
 import it.multicoredev.spacecraft.setup.ModSetup;
 import it.multicoredev.spacecraft.utils.DataGen;
 import net.minecraft.core.Registry;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -87,8 +89,13 @@ public class ModRegistry {
     public static final BlockBase<CreativeGenerator> CREATIVE_GENERATOR = new BlockBase<>("creative_generator", CreativeGenerator::new).setName("Creative Generator");
     public static final RegistryObject<BlockEntityType<CreativeGeneratorBE>> CREATIVE_GENERATOR_BE = BLOCK_ENTITIES.register(CREATIVE_GENERATOR.getRegistryName(), () -> BlockEntityType.Builder.of(CreativeGeneratorBE::new, CREATIVE_GENERATOR.getBlock()).build(null));
 
-    //@DataGen
-    public static final BlockBase<FurnaceGenerator> FURNACE_GENERATOR = new BlockBase<>("furnace_generator", FurnaceGenerator::new).setName("Furnace Generator");
+    @DataGen
+    public static final BlockBase<FurnaceGenerator> FURNACE_GENERATOR = new BlockBase<>("furnace_generator", FurnaceGenerator::new) {
+        @Override
+        public void registerBlockstates(ModBlockStates provider) {
+            provider.generatorBlock(this);
+        }
+    }.setName("Furnace Generator");
     public static final RegistryObject<BlockEntityType<FurnaceGeneratorBE>> FURNACE_GENERATOR_BE = BLOCK_ENTITIES.register(FURNACE_GENERATOR.getRegistryName(), () -> BlockEntityType.Builder.of(FurnaceGeneratorBE::new, FURNACE_GENERATOR.getBlock()).build(null));
     public static final RegistryObject<MenuType<FurnaceGeneratorMenu>> FURNACE_GENERATOR_MENU = MENUS.register(FURNACE_GENERATOR.getRegistryName(), () -> IForgeMenuType.create((windowId, inv, data) -> new FurnaceGeneratorMenu(windowId, data.readBlockPos(), inv, inv.player)));
 }

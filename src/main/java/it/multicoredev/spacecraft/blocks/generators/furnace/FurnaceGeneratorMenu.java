@@ -180,8 +180,8 @@ public class FurnaceGeneratorMenu extends AbstractContainerMenu {
         return blockEntity.getCapability(ForgeCapabilities.ENERGY).map(IEnergyStorage::getMaxEnergyStored).orElse(0);
     }
 
-    public boolean isPowered() {
-        return blockEntity.getBlockState().getValue(BlockStateProperties.POWERED);
+    public boolean isLit() {
+        return blockEntity.getBlockState().getValue(BlockStateProperties.LIT);
     }
 
     public int getBurnTime() {

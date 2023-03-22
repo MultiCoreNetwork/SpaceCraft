@@ -1,6 +1,7 @@
 package it.multicoredev.spacecraft.blocks.generators.creative;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -14,6 +15,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -52,7 +55,7 @@ public class CreativeGenerator extends Block implements EntityBlock {
         super(BlockBehaviour.Properties.of(Material.METAL)
                 .sound(SoundType.METAL)
                 .strength(2, 2.4F)
-                .lightLevel(state -> state.getValue(BlockStateProperties.POWERED) ? 5 : 0)
+                .lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 5 : 0)
                 .requiresCorrectToolForDrops());
     }
 
@@ -78,7 +81,7 @@ public class CreativeGenerator extends Block implements EntityBlock {
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return this.defaultBlockState()
                 .setValue(BlockStateProperties.FACING, ctx.getNearestLookingDirection().getOpposite())
-                .setValue(BlockStateProperties.POWERED, true);
+                .setValue(BlockStateProperties.LIT, true);
     }
 
     @Override
@@ -86,6 +89,8 @@ public class CreativeGenerator extends Block implements EntityBlock {
         super.createBlockStateDefinition(builder);
 
         builder.add(BlockStateProperties.FACING);
-        builder.add(BlockStateProperties.POWERED);
+        builder.add(BlockStateProperties.LIT);
     }
+
+
 }

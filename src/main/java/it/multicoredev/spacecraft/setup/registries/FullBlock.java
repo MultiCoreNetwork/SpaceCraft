@@ -1,6 +1,7 @@
 package it.multicoredev.spacecraft.setup.registries;
 
 import it.multicoredev.spacecraft.datagen.BaseLootTableProvider;
+import it.multicoredev.spacecraft.datagen.ModBlockStates;
 import it.multicoredev.spacecraft.datagen.ModLanguageProvider;
 import it.multicoredev.spacecraft.utils.RecipeBuilderUtil;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -11,7 +12,6 @@ import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -171,7 +171,7 @@ public class FullBlock extends BlockBase<Block> {
 
 
     @Override
-    public void registerBlockstates(BlockStateProvider provider) {
+    public void registerBlockstates(ModBlockStates provider) {
         super.registerBlockstates(provider);
 
         provider.slabBlock(getSlab(), provider.modLoc("block/" + doubleSlabTexture), provider.modLoc("block/" + name));

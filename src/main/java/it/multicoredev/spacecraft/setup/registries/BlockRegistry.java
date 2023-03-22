@@ -1,5 +1,6 @@
 package it.multicoredev.spacecraft.setup.registries;
 
+import it.multicoredev.spacecraft.datagen.ModBlockStates;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
@@ -40,7 +41,7 @@ import java.util.Map;
 public interface BlockRegistry extends BaseRegistry {
     BaseRegistry addBlockTags(TagKey<Block>... tags);
 
-    void registerBlockstates(BlockStateProvider provider);
+    void registerBlockstates(ModBlockStates provider);
 
     Map<TagKey<Block>, RegistryObject<? extends Block>> getBlockTags();
 
