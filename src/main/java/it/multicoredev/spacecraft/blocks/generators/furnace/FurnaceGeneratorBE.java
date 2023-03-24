@@ -1,6 +1,6 @@
 package it.multicoredev.spacecraft.blocks.generators.furnace;
 
-import it.multicoredev.spacecraft.setup.config.FurnaceGeneratorConfig;
+import it.multicoredev.spacecraft.setup.config.server.FurnaceGeneratorConfig;
 import it.multicoredev.spacecraft.setup.registries.ModRegistry;
 import it.multicoredev.spacecraft.utils.EnergyUtil;
 import it.multicoredev.spacecraft.utils.ModEnergyStorage;
@@ -62,6 +62,7 @@ public class FurnaceGeneratorBE extends BlockEntity {
 
     private int burnTime = 0;
     private int maxBurnTime = 0;
+    private boolean isBurning = false;
 
     public FurnaceGeneratorBE(BlockPos pos, BlockState state) {
         super(ModRegistry.FURNACE_GENERATOR_BE.get(), pos, state);
@@ -90,8 +91,10 @@ public class FurnaceGeneratorBE extends BlockEntity {
             if (newBurnTime > 0) {
                 itemHandler.extractItem(0, 1, false);
                 maxBurnTime = newBurnTime;
+                isBurning = true;
             } else {
                 maxBurnTime = 0;
+                isBurning = false;
             }
 
             burnTime = 0;
@@ -102,14 +105,15 @@ public class FurnaceGeneratorBE extends BlockEntity {
             int energyAdded = Math.min(energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored(), FurnaceGeneratorConfig.GENERATION.get());
             energyStorage.addEnergy(energyAdded);
             burnTime += energyAdded;
+
+            isBurning = energyAdded > 0;
+
             setChanged();
         }
 
         BlockState state = level.getBlockState(worldPosition);
-        boolean powered = burnTime < maxBurnTime && energyStorage.getEnergyStored() < energyStorage.getMaxEnergyStored();
-
-        if (state.getValue(BlockStateProperties.LIT) != powered) {
-            level.setBlock(worldPosition, state.setValue(BlockStateProperties.LIT, powered), Block.UPDATE_ALL);
+        if (state.getValue(BlockStateProperties.LIT) != isBurning) {
+            level.setBlock(worldPosition, state.setValue(BlockStateProperties.LIT, isBurning), Block.UPDATE_ALL);
         }
 
         EnergyUtil.sendEnergy(this, energyStorage);
@@ -123,6 +127,7 @@ public class FurnaceGeneratorBE extends BlockEntity {
             CompoundTag infoTag = tag.getCompound("Info");
             burnTime = infoTag.getInt("BurnTime");
             maxBurnTime = infoTag.getInt("MaxBurnTime");
+            isBurning = infoTag.getBoolean("Burning");
         }
 
         super.load(tag);
@@ -136,6 +141,7 @@ public class FurnaceGeneratorBE extends BlockEntity {
         CompoundTag infoTag = new CompoundTag();
         infoTag.putInt("BurnTime", burnTime);
         infoTag.putInt("MaxBurnTime", maxBurnTime);
+        infoTag.putBoolean("Burning", isBurning);
         tag.put("Info", infoTag);
     }
 

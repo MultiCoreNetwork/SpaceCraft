@@ -1,4 +1,4 @@
-package it.multicoredev.spacecraft.setup.config;
+package it.multicoredev.spacecraft.setup.config.server;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 

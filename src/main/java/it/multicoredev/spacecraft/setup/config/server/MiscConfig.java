@@ -1,16 +1,14 @@
-package it.multicoredev.spacecraft.setup.config;
+package it.multicoredev.spacecraft.setup.config.server;
 
-import it.multicoredev.spacecraft.setup.config.client.OverlayConfig;
-import it.multicoredev.spacecraft.setup.config.server.FurnaceGeneratorConfig;
-import it.multicoredev.spacecraft.setup.config.server.MiscConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * BSD 3-Clause License
  * <p>
- * Copyright (c) 2023, Lorenzo Magni, Kevin Delugan, Isaia Tonini, Valerio Collura
+ * Copyright (c) 2023, Lorenzo Magni
  * <p>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -37,35 +35,16 @@ import net.minecraftforge.fml.config.ModConfig;
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-public class Config {
-    public static void register() {
-        registerServerConfigs();
-        registerClientConfigs();
-        registerCommonConfigs();
-    }
+public class MiscConfig {
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> IGNORED_BLOCK_ENTITIES;
 
-    private static void registerServerConfigs() {
-        ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
+    public static void registerServerConfig(ForgeConfigSpec.Builder SERVER_BUILDER) {
+        SERVER_BUILDER.comment("Misc Settings").push("misc");
 
-        FurnaceGeneratorConfig.registerServerConfig(SERVER_BUILDER);
-        MiscConfig.registerServerConfig(SERVER_BUILDER);
+        IGNORED_BLOCK_ENTITIES = SERVER_BUILDER
+                .comment("A list of block entities that should not receive energy wirelessly.")
+                .define("ignored_block_entities", Arrays.asList("TileEntityItemStackToItemStackFactory"));
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_BUILDER.build());
-    }
-
-    private static void registerClientConfigs() {
-        ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
-
-        OverlayConfig.registerClientConfig(CLIENT_BUILDER);
-
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_BUILDER.build());
-    }
-
-    private static void registerCommonConfigs() {
-        ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
-
-
-
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_BUILDER.build());
+        SERVER_BUILDER.pop();
     }
 }

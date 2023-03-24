@@ -69,7 +69,7 @@ public class EnergyUtil {
     }
 
     public static void sendEnergy(BlockEntity generator, ModEnergyStorage energyStorage) {
-        /*AtomicInteger capacity = new AtomicInteger(energyStorage.getEnergyStored());
+        AtomicInteger capacity = new AtomicInteger(energyStorage.getEnergyStored());
         AtomicInteger energyTransfer = new AtomicInteger(energyStorage.getMaxTransfer());
 
         List<BlockEntity> users = WirelessEnergyStorage.get().getUsers();
@@ -95,7 +95,7 @@ public class EnergyUtil {
             }
 
             index++;
-        }*/
+        }
     }
 
     private static void sendEnergy(BlockEntity generator, ModEnergyStorage energyStorage, BlockEntity be, AtomicInteger capacity, AtomicInteger energyTransfer) {

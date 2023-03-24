@@ -79,10 +79,10 @@ public class FurnaceGeneratorScreen extends AbstractContainerScreen<FurnaceGener
     }
 
     private int getBurnTimeScaled(int pixels) {
-        int burnTime = menu.getBurnTime();
-        int maxBurnTime = menu.getMaxBurnTime();
+        double burnTime = menu.getBurnTime();
+        double maxBurnTime = menu.getMaxBurnTime();
 
-        return maxBurnTime != 0 ? burnTime * pixels / maxBurnTime : 0;
+        return maxBurnTime != 0 ? (int) ((burnTime / maxBurnTime) * pixels) : 0;
     }
 
     private int getEnergyScaled(int pixels) {

@@ -78,8 +78,8 @@ public class ModRegistry {
         return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), new Item.Properties().tab(ModSetup.SPACECRAFT_TAB)));
     }
 
-    @DataGen
-    public static final BlockBase<Block> TEST = BlockBase.create("test", BlockBehaviour.Properties.copy(Blocks.STONE)).setName("Test").addBlockTags(BlockTags.MINEABLE_WITH_PICKAXE);
+    //@DataGen
+    //public static final BlockBase<Block> TEST = BlockBase.create("test", BlockBehaviour.Properties.copy(Blocks.STONE)).setName("Test").addBlockTags(BlockTags.MINEABLE_WITH_PICKAXE);
 
     public static TagKey<Item> OXYGEN_TANK_TAG = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("curios", "oxygen_tank"));
     @DataGen
